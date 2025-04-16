@@ -1,15 +1,16 @@
 package se.sundsvall.users.integration.model;
 
+
 public class UserEntity {
 
-    private int id;
+    private long id;
     private String email;
     private int phoneNumber;
     private int municipalityId;
     private boolean status;
 
     public UserEntity() {}
-    public UserEntity(int id, String email, int phoneNumber, int municipalityId, boolean status) {
+    public UserEntity(long id, String email, int phoneNumber, int municipalityId, boolean status) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -17,11 +18,11 @@ public class UserEntity {
         this.status = status;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

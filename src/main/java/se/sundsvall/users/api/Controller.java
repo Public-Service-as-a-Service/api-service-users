@@ -10,4 +10,6 @@ public class Controller {
     public String getSting() {
         return "Hello World";
     }
+
 }
+
