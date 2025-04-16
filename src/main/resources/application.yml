@@ -10,4 +10,7 @@ openapi:
   version: '@project.version@'
 spring:
   application:
-    name: template
+    name: users
+
+  server:
+    port: 8080
