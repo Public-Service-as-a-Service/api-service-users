@@ -5,9 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "guid")
     private long id;

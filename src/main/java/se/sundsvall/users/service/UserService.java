@@ -1,21 +1,26 @@
 package se.sundsvall.users.service;
 
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import se.sundsvall.users.api.UserResource;
 import se.sundsvall.users.api.model.UserRequest;
+import se.sundsvall.users.integration.UserRepository;
 import se.sundsvall.users.integration.model.UserEntity;
+import se.sundsvall.users.service.Mapper.UserMapper;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @Service
+@Transactional
 public class UserService {
     private final Map<Long, UserEntity> testDatabase = new HashMap<>();
-
-    public UserService() {
+    private final UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
         UserEntity user1 = new UserEntity();
         user1.setId(1L);
         user1.setEmail("kalle.kula@sundsvall.se");
@@ -53,9 +58,10 @@ public class UserService {
     }
 
     @GetMapping("users/1")
-    public UserEntity getUserByID(Long id) {
-        UserEntity user = testDatabase.get(id);
-        return user;
+    public UserRequest getUserByID(String id) {
+        var userEntity = userRepository.getById(id);
+        UserMapper userMapper = new UserMapper();
+        return userMapper.toUserRequest(userEntity);
     }
 
     //UPDATE

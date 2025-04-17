@@ -7,7 +7,7 @@ public class UserRequest {
     @Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
     private String email;
     @Schema(description = "Telefonnummer", example = "0701234567")
-    private int phoneNumber;
+    private String phoneNumber;
     @Schema(description = "Kommun", example = "2281")
     public int municipalityId;
 
@@ -19,11 +19,11 @@ public class UserRequest {
         this.email = email;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

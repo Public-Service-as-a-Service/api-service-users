@@ -21,13 +21,12 @@ public class UserResource {
     }
 
     @GetMapping
-    public UserResponse createUser(@RequestBody UserRequest request) {
-        var response = new UserResponse();
-
-
-
-
-
-        return response;
+    public UserResponse getUserById(@RequestBody String id) {
+        UserRequest user = userService.getUserByID(id);
+        UserResponse userResponse = new UserResponse();
+        userResponse.setEmail(user.getEmail());
+        userResponse.setPhoneNumber(user.getPhoneNumber());
+        System.out.println(userResponse);
+        return userResponse;
     }
 }
