@@ -9,6 +9,14 @@ openapi:
   title: ${spring.application.name}
   version: '@project.version@'
 spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3307/user-management
+    username: user-manager
+    password: admin
+  jpa:
+    hibernate:
+      ddl-auto: create
   application:
     name: users
 

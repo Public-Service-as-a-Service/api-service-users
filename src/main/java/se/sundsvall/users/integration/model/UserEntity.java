@@ -1,12 +1,27 @@
 package se.sundsvall.users.integration.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "users")
 public class UserEntity {
 
+    @Column(name = "guid")
     private long id;
+    @Id
+    @Column(name = "email-address")
     private String email;
+
+    @Column(name = "phone-number")
     private String phoneNumber;
+
+    @Column(name = "municipality-id")
     private int municipalityId;
+
+    @Column(name = "status")
     private boolean status;
 
     public UserEntity() {}
