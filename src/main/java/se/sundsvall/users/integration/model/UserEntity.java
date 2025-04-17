@@ -5,12 +5,12 @@ public class UserEntity {
 
     private long id;
     private String email;
-    private int phoneNumber;
+    private String phoneNumber;
     private int municipalityId;
     private boolean status;
 
     public UserEntity() {}
-    public UserEntity(long id, String email, int phoneNumber, int municipalityId, boolean status) {
+    public UserEntity(long id, String email, String phoneNumber, int municipalityId, boolean status) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -34,11 +34,11 @@ public class UserEntity {
         this.email = email;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

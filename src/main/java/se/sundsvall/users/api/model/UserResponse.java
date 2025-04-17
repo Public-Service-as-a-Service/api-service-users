@@ -1,8 +1,12 @@
 package se.sundsvall.users.api.model;
 
-public class CreateUserResponse {
+import io.swagger.v3.oas.annotations.media.Schema;
 
+public class UserResponse {
+
+    @Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
     private String email;
+    @Schema(description = "Telefonnummer", example = "0701234567")
     private int phoneNumber;
 
 
