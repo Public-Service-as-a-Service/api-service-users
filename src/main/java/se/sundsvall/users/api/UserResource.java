@@ -20,13 +20,31 @@ public class UserResource {
         this.userService = userService;
     }
 
-    @GetMapping
+    //LÄGG TILL: CREATE + finns eposten ruternera felmeddelande
+    @PostMapping("POST/users")
+    public void saveUser(@RequestBody String email, String phoneNumber, String municipalityId, String status){
+        UserRequest userRequest = new UserRequest();
+        userRequest.setEmail(email);
+        userRequest.setPhoneNumber(phoneNumber);
+        userRequest.setMunicipalityId(municipalityId);
+        userRequest.setStatus(status);
+        userService.createUser(userRequest);
+    }
+
+
+    @GetMapping("GET/users/{email}")
     public UserResponse getUserById(@RequestBody String id) {
         UserRequest user = userService.getUserByID(id);
         UserResponse userResponse = new UserResponse();
         userResponse.setEmail(user.getEmail());
         userResponse.setPhoneNumber(user.getPhoneNumber());
-        System.out.println(userResponse);
+        userResponse.setMunicipalityId((user.getMunicipalityId()));
         return userResponse;
+        //LÄGG TILL: saknas användare returnera felmeddelande
     }
+
+    //LÄGG TILL UPDATE + saknas användare returnera felmeddelande
+
+    //LÄGG TILL: DELETE + om Eposten inte finns returnera felmeddelande
+
 }
