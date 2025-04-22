@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import se.sundsvall.users.api.UserResource;
 import se.sundsvall.users.api.model.UserRequest;
+import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.UserRepository;
 import se.sundsvall.users.integration.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
@@ -13,7 +14,9 @@ import se.sundsvall.users.service.Mapper.UserMapper;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+import static se.sundsvall.users.service.Mapper.UserMapper.toUserEntity;
+
+
 @Service
 @Transactional
 public class UserService {
@@ -21,35 +24,15 @@ public class UserService {
     private final UserRepository userRepository;
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        UserEntity user1 = new UserEntity();
-        user1.setId(1L);
-        user1.setEmail("kalle.kula@sundsvall.se");
-        user1.setPhoneNumber("0701234567");
-        user1.setMunicipalityId(2188);
-        user1.setStatus(false);
-        testDatabase.put(1L, user1);
 
-        UserEntity user2 = new UserEntity();
-        user2.setId(1L);
-        user2.setEmail("tommy.tomat@sundsvall.se");
-        user2.setPhoneNumber("0707654321");
-        user2.setMunicipalityId(2188);
-        user2.setStatus(true);
-        testDatabase.put(2L, user2);
     }
 
 
     //CREATE
-    @PostMapping("user/{userId}")
-    public UserEntity createUser(Long id, String email, String phoneNumber, int municipalityId, boolean status) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(id);
-        userEntity.setEmail(email);
-        userEntity.setPhoneNumber(phoneNumber);
-        userEntity.setMunicipalityId(municipalityId);
-        userEntity.setStatus(status);
-        testDatabase.put(id, userEntity);
-        return userEntity;
+    //@PostMapping("user/{userId}")
+    public void createUser(UserRequest userRequest) {
+
+        final var userEntity = userRepository.save(toUserEntity(userRequest));
     }
 
     //READ
@@ -57,7 +40,7 @@ public class UserService {
         return null;
     }
 
-    @GetMapping("users/1")
+
     public UserRequest getUserByID(String id) {
         var userEntity = userRepository.getById(id);
         UserMapper userMapper = new UserMapper();
@@ -65,19 +48,14 @@ public class UserService {
     }
 
     //UPDATE
-    @PutMapping("user/{userId}")
-    public UserEntity updateUser(Long id, String email, String phoneNumber, int municipalityId, boolean status) {
-        UserEntity userEntity = testDatabase.get(id);
-        userEntity.setEmail(email);
-        userEntity.setPhoneNumber(phoneNumber);
-        userEntity.setMunicipalityId(municipalityId);
-        userEntity.setStatus(status);
-        testDatabase.put(id, userEntity);
-        return userEntity;
+    //@PutMapping("user/{userId}")
+    public UserEntity updateUser(String id, String email, String phoneNumber, String municipalityId, boolean status) {
+
+        return null;
     }
 
     //DELETE
-    @DeleteMapping
+    //@DeleteMapping
     public UserEntity deleteUser(Long id){
         testDatabase.remove(id);
         return null;

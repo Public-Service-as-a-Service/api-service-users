@@ -22,7 +22,7 @@ public class UserResource {
 
     //LÄGG TILL: CREATE + finns eposten ruternera felmeddelande
     @PostMapping("POST/users")
-    public void saveUser(@RequestBody String email, String phoneNumber, String municipalityId, String status){
+    public void saveUser(String email, String phoneNumber, String municipalityId, String status){
         UserRequest userRequest = new UserRequest();
         userRequest.setEmail(email);
         userRequest.setPhoneNumber(phoneNumber);

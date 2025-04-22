@@ -1,9 +1,7 @@
 package se.sundsvall.users.integration.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.io.Serializable;
 
@@ -14,7 +12,8 @@ public class UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "guid")
-    private long id;
+    @UuidGenerator
+    private String id;
     @Id
     @Column(name = "email-address")
     private String email;
@@ -23,13 +22,13 @@ public class UserEntity implements Serializable {
     private String phoneNumber;
 
     @Column(name = "municipality-id")
-    private int municipalityId;
+    private String municipalityId;
 
-    @Column(name = "status")
-    private boolean status;
+    @Column(name = "status", columnDefinition = "ENUM")
+    private String status;
 
     public UserEntity() {}
-    public UserEntity(long id, String email, String phoneNumber, int municipalityId, boolean status) {
+    public UserEntity(String id, String email, String phoneNumber, String municipalityId, String status) {
         this.id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -37,11 +36,11 @@ public class UserEntity implements Serializable {
         this.status = status;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -61,19 +60,19 @@ public class UserEntity implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getMunicipalityId() {
+    public String getMunicipalityId() {
         return municipalityId;
     }
 
-    public void setMunicipalityId(int municipalityId) {
+    public void setMunicipalityId(String municipalityId) {
         this.municipalityId = municipalityId;
     }
 
-    public boolean isStatus() {
+    public String isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }
