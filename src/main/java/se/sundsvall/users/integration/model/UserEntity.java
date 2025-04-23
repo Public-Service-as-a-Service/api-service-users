@@ -1,7 +1,12 @@
 package se.sundsvall.users.integration.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.UuidGenerator;
+import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 
 import java.io.Serializable;
 
@@ -16,12 +21,18 @@ public class UserEntity implements Serializable {
     private String id;
     @Id
     @Column(name = "email-address")
+    @NotBlank(message = "Email-adress måste anges")
+    @Email(message = "ej en giltig Email-adress")
     private String email;
 
     @Column(name = "phone-number")
+    @Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$")
+    @NotBlank
     private String phoneNumber;
 
     @Column(name = "municipality-id")
+    @ValidMunicipalityId
+    @NotBlank
     private String municipalityId;
 
     @Column(name = "status", columnDefinition = "ENUM")
@@ -68,7 +79,7 @@ public class UserEntity implements Serializable {
         this.municipalityId = municipalityId;
     }
 
-    public String isStatus() {
+    public String getStatus() {
         return status;
     }
 

@@ -1,18 +1,18 @@
 package se.sundsvall.users.api;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.model.UserEntity;
 import se.sundsvall.users.service.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class UserResource {
     private final UserService userService;
 
@@ -22,6 +22,7 @@ public class UserResource {
 
     //LÄGG TILL: CREATE + finns eposten ruternera felmeddelande
     @PostMapping("POST/users")
+    @Validated
     public void saveUser(String email, String phoneNumber, String municipalityId, String status){
         UserRequest userRequest = new UserRequest();
         userRequest.setEmail(email);
@@ -32,19 +33,32 @@ public class UserResource {
     }
 
 
-    @GetMapping("GET/users/{email}")
-    public UserResponse getUserById(@RequestBody String id) {
+    @GetMapping("GET/users/{email}") //LÄGG TILL: saknas användare returnera felmeddelande
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public UserResponse getUserById(@RequestBody @Valid String id) {
         UserRequest user = userService.getUserByID(id);
         UserResponse userResponse = new UserResponse();
         userResponse.setEmail(user.getEmail());
         userResponse.setPhoneNumber(user.getPhoneNumber());
         userResponse.setMunicipalityId((user.getMunicipalityId()));
         return userResponse;
-        //LÄGG TILL: saknas användare returnera felmeddelande
     }
 
-    //LÄGG TILL UPDATE + saknas användare returnera felmeddelande
+    @PutMapping("PUT/users/{email}")//LÄGG TILL: saknas användare returnera felmeddelande
+    @Validated
+    public void updateUser(String email, String phoneNumber, String municipalityId, String status){
+        UserRequest userRequest = new UserRequest();
+        userRequest.setEmail(email);
+        userRequest.setMunicipalityId(municipalityId);
+        userRequest.setPhoneNumber(phoneNumber);
+        userRequest.setStatus(status);
+        userService.updateUser(userRequest, email);
+    }
 
-    //LÄGG TILL: DELETE + om Eposten inte finns returnera felmeddelande
+    @DeleteMapping("DELETE/users/{email}") //LÄGG TILL: om Eposten inte finns returnera felmeddelande
+    public void deleteById(@Valid String id) {
+        userService.deleteUser(id);
+    }
+
 
 }

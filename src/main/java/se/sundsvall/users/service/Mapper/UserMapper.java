@@ -1,12 +1,9 @@
 package se.sundsvall.users.service.Mapper;
 
-
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.integration.model.UserEntity;
 
 public class UserMapper {
-
-
 
     public UserRequest toUserRequest(UserEntity user) {
         UserRequest userRequest = new UserRequest();

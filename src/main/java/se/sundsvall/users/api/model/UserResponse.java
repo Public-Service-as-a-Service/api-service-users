@@ -9,11 +9,15 @@ public class UserResponse {
     @Schema(description = "Telefonnummer", example = "0701234567")
     private String phoneNumber;
     @Schema(description = "Kommun-id", example = "2281")
-    private String municipalityId;
-    @Schema(description = "Status", example = "aktiv")
-    private String status;
+    public String municipalityId;
 
+    public String getMunicipalityId() {
+        return municipalityId;
+    }
 
+    public void setMunicipalityId(String municipalityId) {
+        this.municipalityId = municipalityId;
+    }
 
     public String getEmail() {
         return email;
@@ -29,11 +33,5 @@ public class UserResponse {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-    public String getMunicipalityId() {
-        return municipalityId;
-    }
-    public void setMunicipalityId(String municipalityId) {
-        this.municipalityId = municipalityId;
     }
 }
