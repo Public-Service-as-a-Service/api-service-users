@@ -1,17 +1,11 @@
 package se.sundsvall.users.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 
-public class UserRequest {
-
-    @Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
-    @Email(message = "must be an Email-adress")
-    @NotBlank
-    private String email;
+public class UpdateUserRequest {
 
     @Schema(description = "Telefonnummer", example = "0701234567")
     @NotBlank(message = "must be a Phone-number")
@@ -23,17 +17,9 @@ public class UserRequest {
     @ValidMunicipalityId
     private String municipalityId;
 
-    @Schema(description = "Status", example = "ACTIVE")
-    @NotBlank(message = "status must be Active, Suspended or Inactive")
+    @Schema(description = "Status", example = "ACTIVE   ")
+    @NotBlank(message = "Status must be Active, Suspended or Inactive")
     private String status;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getPhoneNumber() {
         return phoneNumber;

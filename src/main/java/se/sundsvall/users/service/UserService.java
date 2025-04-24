@@ -1,18 +1,17 @@
 package se.sundsvall.users.service;
 
-
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-import se.sundsvall.users.api.UserResource;
+import org.zalando.problem.Problem;
+import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
+import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.UserRepository;
-import se.sundsvall.users.integration.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import static java.lang.String.format;
+import static org.zalando.problem.Status.CONFLICT;
+import static org.zalando.problem.Status.NOT_FOUND;
 import static se.sundsvall.users.service.Mapper.UserMapper.toUserEntity;
 
 @Service
@@ -26,32 +25,52 @@ public class UserService {
     }
 
     //CREATE
-    public void createUser(UserRequest userRequest) {
-       final var userEntity = userRepository.save(toUserEntity(userRequest));
+    public UserResponse createUser(UserRequest userRequest) {
+        if (userRepository.findById(userRequest.getEmail()).isEmpty()){
+            final var userEntity = userRepository.save(toUserEntity(userRequest));
+
+            UserMapper userMapper = new UserMapper();
+            return userMapper.toUserResponse(userEntity);
+        }
+        throw Problem.valueOf(CONFLICT, format("user %s already exist", userRequest.getEmail()));
     }
 
     //READ
-    public UserRequest getUserByID(String id) {
-        var userEntity = userRepository.getById(id);
-        UserMapper userMapper = new UserMapper();
-        return userMapper.toUserRequest(userEntity);
+    public UserResponse getUserByID(String id) {
+        if (userRepository.findById(id).isPresent()) {
+            var userEntity = userRepository.getById(id);
+
+            UserMapper userMapper = new UserMapper();
+            return userMapper.toUserResponse(userEntity);
+        }
+        throw Problem.valueOf(NOT_FOUND, format("user %s was not found", id));
     }
 
     //UPDATE
-    public UserEntity updateUser(UserRequest userRequest, String email) {
-       var userEntity = userRepository.getById(email);
+    public UserResponse updateUser(UpdateUserRequest userRequest, String email) {
+        if (userRepository.findById(email).isPresent()) {
+            var userEntity = userRepository.getById(email);
 
-       userEntity.setPhoneNumber(userRequest.getPhoneNumber());
-       userEntity.setMunicipalityId(userRequest.getMunicipalityId());
-       userEntity.setStatus(userRequest.getStatus());
-       userRepository.save(userEntity);
+            userEntity.setPhoneNumber(userRequest.getPhoneNumber());
+            userEntity.setMunicipalityId(userRequest.getMunicipalityId());
+            userEntity.setStatus(userRequest.getStatus());
+            userRepository.save(userEntity);
 
-       return null;
+            UserMapper userMapper = new UserMapper();
+            return userMapper.toUserResponse(userEntity);
+        }
+        throw Problem.valueOf(NOT_FOUND, format("user %s was not found", email));
     }
 
     //DELETE
-    public UserEntity deleteUser(String id){
-        userRepository.deleteById(id);
-        return null;
+    public UserResponse deleteUser(String id){
+        if (userRepository.findById(id).isPresent()) {
+            var userEntity = userRepository.getById(id);
+            userRepository.deleteById(id);
+
+            UserMapper userMapper = new UserMapper();
+            return userMapper.toUserResponse(userEntity);
+        }
+        throw Problem.valueOf(NOT_FOUND, format("user with %s was not found", id));
     }
 }
