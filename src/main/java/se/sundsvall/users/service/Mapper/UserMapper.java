@@ -4,21 +4,26 @@ import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.model.UserEntity;
 
+import java.util.Optional;
+
 public class UserMapper {
 
     public UserResponse toUserResponse(UserEntity user) {
-        UserResponse userResponse = new UserResponse();
-        userResponse.setEmail(user.getEmail());
-        userResponse.setPhoneNumber(user.getPhoneNumber());
-        userResponse.setMunicipalityId(user.getMunicipalityId());
-        return userResponse;
+        return Optional.ofNullable(user)
+                .map(r -> UserResponse.create()
+                        .withEmail(r.getEmail())
+                        .withPhoneNumber(r.getPhoneNumber())
+                        .withMunicipalityId(r.getMunicipalityId())
+                        .withStatus(r.getStatus()))
+                .orElse(null);
     }
     public static UserEntity toUserEntity(UserRequest userRequest) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmail(userRequest.getEmail());
-        userEntity.setPhoneNumber(userRequest.getPhoneNumber());
-        userEntity.setMunicipalityId(userRequest.getMunicipalityId());
-        userEntity.setStatus(userRequest.getStatus());
-        return userEntity;
+        return Optional.ofNullable(userRequest)
+                .map(r -> UserEntity.create()
+                        .withEmail(r.getEmail())
+                        .withPhoneNumber(r.getPhoneNumber())
+                        .withMunicipalityId(r.getMunicipalityId())
+                        .withStatus(r.getStatus()))
+                .orElse(null);
     }
 }

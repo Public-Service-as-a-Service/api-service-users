@@ -27,12 +27,21 @@ public class UserRequest {
     @NotBlank(message = "status must be Active, Suspended or Inactive")
     private String status;
 
+    public static UserRequest create() {
+        return new UserRequest();
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public UserRequest withEmail(String email) {
+        this.email = email;
+        return this;
     }
 
     public String getPhoneNumber() {
@@ -43,6 +52,11 @@ public class UserRequest {
         this.phoneNumber = phoneNumber;
     }
 
+    public UserRequest withPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        return this;
+    }
+
     public String getMunicipalityId() {
         return municipalityId;
     }
@@ -51,7 +65,17 @@ public class UserRequest {
         this.municipalityId = municipalityId;
     }
 
+    public UserRequest withMunicipalityId(String municipalityId) {
+        this.municipalityId = municipalityId;
+        return this;
+    }
+
     public String getStatus() { return status;}
 
     public void setStatus(String status) { this.status = status; }
+
+    public UserRequest withStatus(String status) {
+        this.status = status;
+        return this;
+    }
 }
