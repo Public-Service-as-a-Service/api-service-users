@@ -9,7 +9,7 @@ import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 public class UserRequest {
 
     @Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
-    @Email(message = "must be an Email-adress")
+    @Email(message = "must be a valid Email-adress")
     @NotBlank
     private String email;
 

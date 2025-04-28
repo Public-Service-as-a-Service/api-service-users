@@ -46,12 +46,21 @@ public class UserEntity implements Serializable {
         this.status = status;
     }
 
+    public static UserEntity create(){
+        return new UserEntity();
+    }
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public UserEntity withId(final String id){
+        this.id = id;
+        return this;
     }
 
     public String getEmail() {
@@ -62,12 +71,22 @@ public class UserEntity implements Serializable {
         this.email = email;
     }
 
+    public UserEntity withEmail(String email){
+        setEmail(email);
+        return this;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public UserEntity withPhoneNumber(String phoneNumber){
+        setPhoneNumber(phoneNumber);
+        return this;
     }
 
     public String getMunicipalityId() {
@@ -78,11 +97,21 @@ public class UserEntity implements Serializable {
         this.municipalityId = municipalityId;
     }
 
+    public UserEntity withMunicipalityId(String municipalityId){
+        setMunicipalityId(municipalityId);
+        return this;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public UserEntity withStatus(String status){
+        setStatus(status);
+        return this;
     }
 }

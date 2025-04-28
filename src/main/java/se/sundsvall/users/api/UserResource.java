@@ -37,7 +37,7 @@ public class UserResource {
         userService.createUser(userRequest);
     }
 
-    @GetMapping("GET/users/{email}") //LÄGG TILL: saknas användare returnera felmeddelande
+    @GetMapping("GET/users/{email}")
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<UserResponse> getUserById(@Valid @Email String id) {
         var user = userService.getUserByID(id);
@@ -47,7 +47,6 @@ public class UserResource {
     @PutMapping("PUT/users/{email}")
     @Validated
     public ResponseEntity<UserResponse> updateUser(@Email String email, @RequestBody @Valid UpdateUserRequest userRequest){
-
         var user = userService.updateUser(userRequest, email);
         return user != null ? ok(user) : ResponseEntity.noContent().build();
     }

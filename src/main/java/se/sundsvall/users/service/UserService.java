@@ -1,13 +1,21 @@
 package se.sundsvall.users.service;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.transaction.Transactional;
+import org.hibernate.annotations.UuidGenerator;
 import org.springframework.stereotype.Service;
 import org.zalando.problem.Problem;
 import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.UserRepository;
+import se.sundsvall.users.integration.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
+
+import java.io.Serializable;
+import java.util.Optional;
 
 import static java.lang.String.format;
 import static org.zalando.problem.Status.CONFLICT;
@@ -37,13 +45,12 @@ public class UserService {
 
     //READ
     public UserResponse getUserByID(String id) {
-        if (userRepository.findById(id).isPresent()) {
-            var userEntity = userRepository.getById(id);
+       if (userRepository.findById(id).isPresent()) {
+           UserEntity userEntity = userRepository.getById(id);
 
-            UserMapper userMapper = new UserMapper();
-            return userMapper.toUserResponse(userEntity);
-        }
-        throw Problem.valueOf(NOT_FOUND, format("user %s was not found", id));
+           return UserMapper.toUserResponse(userEntity);
+       }
+       throw Problem.valueOf(NOT_FOUND, format("user %s was not found", id));
     }
 
     //UPDATE

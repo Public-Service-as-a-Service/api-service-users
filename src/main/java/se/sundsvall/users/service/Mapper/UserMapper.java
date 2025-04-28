@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class UserMapper {
 
-    public UserResponse toUserResponse(UserEntity user) {
+    public static UserResponse toUserResponse(final UserEntity user) {
         return Optional.ofNullable(user)
                 .map(r -> UserResponse.create()
                         .withEmail(r.getEmail())
