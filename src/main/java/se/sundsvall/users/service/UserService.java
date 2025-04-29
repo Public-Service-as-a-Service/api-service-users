@@ -26,58 +26,60 @@ import static se.sundsvall.users.service.Mapper.UserMapper.toUserEntity;
 @Transactional
 public class UserService {
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+	public UserService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
-    //CREATE
-    public UserResponse createUser(UserRequest userRequest) {
-        if (userRepository.findById(userRequest.getEmail()).isEmpty()){
-            final var userEntity = userRepository.save(toUserEntity(userRequest));
+	// CREATE
+	public UserResponse createUser(UserRequest userRequest) {
+		if (userRepository.findById(userRequest.getEmail()).isEmpty()) {
+			final var userEntity = userRepository.save(toUserEntity(userRequest));
 
-            UserMapper userMapper = new UserMapper();
-            return userMapper.toUserResponse(userEntity);
-        }
-        throw Problem.valueOf(CONFLICT, format("user %s already exist", userRequest.getEmail()));
-    }
+			return UserMapper.toUserResponse(userEntity);
+		}
+		throw Problem.valueOf(CONFLICT, format("user %s already exist", userRequest.getEmail()));
+	}
 
-    //READ
-    public UserResponse getUserByID(String id) {
-       if (userRepository.findById(id).isPresent()) {
-           UserEntity userEntity = userRepository.getById(id);
+	// READ
+	public UserResponse getUserByID(String id) {
+		if (userRepository.findById(id).isPresent()) {
+			// TODO getById() är deprecated. I det här fallet kan det vara bättre att använda findByEmail()
+			UserEntity userEntity = userRepository.getById(id);
 
-           return UserMapper.toUserResponse(userEntity);
-       }
-       throw Problem.valueOf(NOT_FOUND, format("user %s was not found", id));
-    }
+			return UserMapper.toUserResponse(userEntity);
+		}
+		throw Problem.valueOf(NOT_FOUND, format("user %s was not found", id));
+	}
 
-    //UPDATE
-    public UserResponse updateUser(UpdateUserRequest userRequest, String email) {
-        if (userRepository.findById(email).isPresent()) {
-            var userEntity = userRepository.getById(email);
+	// UPDATE
+	public UserResponse updateUser(UpdateUserRequest userRequest, String email) {
+		if (userRepository.findById(email).isPresent()) {
+			// TODO samma som ovan, ersätt med t.ex. findByEmail()
+			var userEntity = userRepository.getById(email);
 
-            userEntity.setPhoneNumber(userRequest.getPhoneNumber());
-            userEntity.setMunicipalityId(userRequest.getMunicipalityId());
-            userEntity.setStatus(userRequest.getStatus());
-            userRepository.save(userEntity);
+			userEntity.setPhoneNumber(userRequest.getPhoneNumber());
+			userEntity.setMunicipalityId(userRequest.getMunicipalityId());
+			userEntity.setStatus(userRequest.getStatus());
+			userRepository.save(userEntity);
 
-            UserMapper userMapper = new UserMapper();
-            return userMapper.toUserResponse(userEntity);
-        }
-        throw Problem.valueOf(NOT_FOUND, format("user %s was not found", email));
-    }
+			UserMapper userMapper = new UserMapper();
+			return userMapper.toUserResponse(userEntity);   // TODO statisk metod anropas med "UserMapper.toUserResponse(userEntity)"
+		}
+		throw Problem.valueOf(NOT_FOUND, format("user %s was not found", email));
+	}
 
-    //DELETE
-    public UserResponse deleteUser(String id){
-        if (userRepository.findById(id).isPresent()) {
-            var userEntity = userRepository.getById(id);
-            userRepository.deleteById(id);
+	// TODO kör email här också istället för "id"
+	// DELETE
+	public UserResponse deleteUser(String id) {
+		if (userRepository.findById(id).isPresent()) {
+			var userEntity = userRepository.getById(id);
+			userRepository.deleteById(id);
 
-            UserMapper userMapper = new UserMapper();
-            return userMapper.toUserResponse(userEntity);
-        }
-        throw Problem.valueOf(NOT_FOUND, format("user with %s was not found", id));
-    }
+			UserMapper userMapper = new UserMapper();
+			return userMapper.toUserResponse(userEntity);
+		}
+		throw Problem.valueOf(NOT_FOUND, format("user with %s was not found", id));
+	}
 }
