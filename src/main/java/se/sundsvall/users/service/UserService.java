@@ -37,8 +37,7 @@ public class UserService {
         if (userRepository.findById(userRequest.getEmail()).isEmpty()){
             final var userEntity = userRepository.save(toUserEntity(userRequest));
 
-            UserMapper userMapper = new UserMapper();
-            return userMapper.toUserResponse(userEntity);
+            return UserMapper.toUserResponse(userEntity);
         }
         throw Problem.valueOf(CONFLICT, format("user %s already exist", userRequest.getEmail()));
     }

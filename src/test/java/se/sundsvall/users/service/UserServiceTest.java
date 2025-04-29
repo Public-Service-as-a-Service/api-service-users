@@ -104,6 +104,7 @@ public class UserServiceTest {
             verify(userRepositoryMock).save(same(userEntity));
             assertThat(createdUser).isNotNull();
             assertThat(createdUser).isEqualTo(userResponseMock);
+            //assertThat(userRequestMock).isEqualTo(userEntity);
             //assertThat(createdUser).isEqualTo(userEntity);
         }
     }
