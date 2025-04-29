@@ -1,6 +1,5 @@
 package se.sundsvall.users.integration.db;
 
-import jakarta.validation.constraints.Email;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -13,8 +12,6 @@ import se.sundsvall.users.integration.model.UserEntity;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.mockito.Mockito.verify;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @DataJpaTest
@@ -86,7 +83,6 @@ public class UserRepositoryTest {
         assertThat(updatedEntity.getPhoneNumber()).isNotEqualTo(PHONE_NUMBER_1);
         assertThat(updatedEntity.getMunicipalityId()).isNotEqualTo(MUNICIPALITY_ID_1);
         assertThat(updatedEntity.getStatus()).isNotSameAs(STATUS_1);
-
     }
 
     @Test

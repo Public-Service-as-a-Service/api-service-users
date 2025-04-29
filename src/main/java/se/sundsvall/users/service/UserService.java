@@ -62,8 +62,7 @@ public class UserService {
             userEntity.setStatus(userRequest.getStatus());
             userRepository.save(userEntity);
 
-            UserMapper userMapper = new UserMapper();
-            return userMapper.toUserResponse(userEntity);
+            return UserMapper.toUserResponse(userEntity);
         }
         throw Problem.valueOf(NOT_FOUND, format("user %s was not found", email));
     }
@@ -74,8 +73,7 @@ public class UserService {
             var userEntity = userRepository.getById(id);
             userRepository.deleteById(id);
 
-            UserMapper userMapper = new UserMapper();
-            return userMapper.toUserResponse(userEntity);
+            return UserMapper.toUserResponse(userEntity);
         }
         throw Problem.valueOf(NOT_FOUND, format("user with %s was not found", id));
     }

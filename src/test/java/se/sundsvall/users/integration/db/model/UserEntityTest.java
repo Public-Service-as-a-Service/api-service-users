@@ -5,21 +5,21 @@ import se.sundsvall.users.integration.model.UserEntity;
 
 import java.util.UUID;
 
-import static com.google.code.beanmatchers.BeanMatchers.*;
-import static org.assertj.core.api.Assertions.allOf;
+import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
+import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetters;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.AllOf.allOf;
 
 public class UserEntityTest {
 
-//    @Test
-//    void testBean() {
-//        assertThat(UserEntity.class, allOf(
-//                hasValidBeanConstructor(),
-//                hasValidGettersAndSetters(),
-//                hasValidBeanHashCode(),
-//                hasValidBeanEquals(),
-//                hasValidBeanToString()));
-//    }
+    @Test
+    void testBean() {
+        assertThat(UserEntity.class, allOf(
+                hasValidBeanConstructor(),
+                hasValidGettersAndSetters()
+                ));
+    }
 
     @Test
     void testBuildMethod(){

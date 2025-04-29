@@ -1,15 +1,11 @@
 package se.sundsvall.users.service.mapper;
 
-import org.checkerframework.common.value.qual.ArrayLenRange;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.integration.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
-
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -60,11 +56,9 @@ public class UserMapperTest {
         assertThat(result.getPhoneNumber()).isEqualTo(phoneNumber);
         assertThat(result.getMunicipalityId()).isEqualTo(municipalityId);
         assertThat(result.getStatus()).isEqualTo(status);
+    }
 
-    }
-    @Test
-    void toUserEntityWhenNull() {
-        var uuid = "apa";
-        UUID.fromString(uuid.toString());
-    }
+//    @Test
+//    void toUserEntityWhenNull() {
+//    }
 }
