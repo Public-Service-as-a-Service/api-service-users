@@ -25,76 +25,72 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-    @Mock
-    private UserRepository userRepositoryMock;
+	@Mock
+	private UserRepository userRepositoryMock;
 
-    @Mock
-    private ObjectMapper objectMapperMock;
+	@Mock
+	private UserMapper userMapper;
 
-    @InjectMocks
-    private UserService userService;
+	@InjectMocks
+	private UserService userService;
 
-    @Test
-    void getUserById() {
-        //Arrange
-        final var email = "Test123!@mail.com";
-        final var userEntity = UserEntity.create().withId(email.toString());
-        final var expectedUser = new UserResponse();
+	@Test
+	void getUserByEmail() {
+		// Arrange
+		final var email = "Test123@mail.com";
+		final var userEntity = UserEntity.create().withId(email);
+		final var expectedUser = new UserResponse();
 
-        when(userRepositoryMock.findById(email)).thenReturn(Optional.of(userEntity));
-        when(userRepositoryMock.getById(email.toString())).thenReturn((userEntity));
+		when(userRepositoryMock.findById(email)).thenReturn(Optional.of(userEntity));
+		when(userRepositoryMock.getReferenceById(email)).thenReturn(userEntity);
+		when(userMapper.toUserResponse(userEntity)).thenReturn(expectedUser);
 
-        try (MockedStatic<UserMapper> mapperMock = Mockito.mockStatic(UserMapper.class)) {
-            mapperMock.when(() -> UserMapper.toUserResponse(any())).thenReturn(expectedUser);
+		// Act
+		final var result = userService.getUserByEmail(email);
 
-            //Act
-            final var result = userService.getUserByID(email);
+		// Assert
+		assertThat(result).isSameAs(expectedUser);
+		verify(userRepositoryMock).findById(email);
+		verify(userRepositoryMock).getReferenceById(email);
+		verify(userMapper).toUserResponse(userEntity);
 
-            //Assert
-            assertThat(result).isSameAs(expectedUser);
-            verify(userRepositoryMock).findById(email);
-            verify(userRepositoryMock).getById(email.toString());
-            mapperMock.verify(() -> UserMapper.toUserResponse(userEntity));
-        }
-    }
+	}
 
+	@Test
+	void createUser() {
+		// Arrange
+		final var id = "TestMail123@mail.se";
+		final var phoneNumber = "99070121212";
+		final var municipalityId = "2281";
+		final var status = "Active";
+		final var userRequestMock = UserRequest.create().withEmail(id)
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus(status);
+		final var userEntity = UserEntity.create().withEmail(id)
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus(status);
+		final var userResponseMock = UserResponse.create().withEmail(id)
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus(status);
 
-    @Test
-    void createUser() {
-        //Arrange
-        final var id = "TestMail123@mail.se";
-        final var phoneNumber = "99070121212";
-        final var municipalityId = "2281";
-        final var status = "Active";
-        final var userRequestMock = UserRequest.create().withEmail(id)
-                .withPhoneNumber(phoneNumber)
-                .withMunicipalityId(municipalityId)
-                .withStatus(status);
-        final var userEntity = UserEntity.create().withEmail(id)
-                .withPhoneNumber(phoneNumber)
-                .withMunicipalityId(municipalityId)
-                .withStatus(status);
-        final var userResponseMock = UserResponse.create().withEmail(id)
-                .withPhoneNumber(phoneNumber)
-                .withMunicipalityId(municipalityId)
-                .withStatus(status);
+		when(userRepositoryMock.save(userEntity)).thenReturn(userEntity);
+		when(userRepositoryMock.findById(id)).thenReturn(Optional.empty());
 
-        when(userRepositoryMock.save(any())).thenReturn(userEntity);
-        when(userRepositoryMock.findById(id)).thenReturn(Optional.empty());
+		when(userMapper.toUserEntity(userRequestMock)).thenReturn(userEntity);
+		when(userMapper.toUserResponse(userEntity)).thenReturn(userResponseMock);
 
-        try (MockedStatic<UserMapper> mapperMock = Mockito.mockStatic(UserMapper.class)) {
-            mapperMock.when(() -> UserMapper.toUserEntity(any())).thenReturn(userEntity);
-            mapperMock.when(() -> UserMapper.toUserResponse(userEntity)).thenReturn(userResponseMock);
+		// Act
+		final var createdUser = userService.createUser(userRequestMock);
 
-            //Act
-            final var createdUser = userService.createUser(userRequestMock);
+		// Assert
+		verify(userRepositoryMock).save(same(userEntity));
+		assertThat(createdUser).isNotNull();
+		assertThat(createdUser).isEqualTo(userResponseMock);
+		// assertThat(userRequestMock).isEqualTo(userEntity);
+		// assertThat(createdUser).isEqualTo(userEntity);
 
-            //Assert
-            verify(userRepositoryMock).save(same(userEntity));
-            assertThat(createdUser).isNotNull();
-            assertThat(createdUser).isEqualTo(userResponseMock);
-            //assertThat(userRequestMock).isEqualTo(userEntity);
-            //assertThat(createdUser).isEqualTo(userEntity);
-        }
-    }
+	}
 }

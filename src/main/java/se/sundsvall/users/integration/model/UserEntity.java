@@ -10,108 +10,109 @@ import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users",
+	indexes = {
+		@Index(name = "idx_email_address", columnList = "email_address", unique = true)
+	})
 public class UserEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Column(name = "guid")
-    @UuidGenerator
-    private String id;
-    @Id
-    @Column(name = "email-address")
-    @NotBlank(message = "Email-adress måste anges")
-    @Email(message = "ej en giltig Email-adress")
-    private String email;
+	@UuidGenerator
+	@Column(nullable = false, name = "guid")
+	private String id;
+	@Id
+	@Column(nullable = false, name = "email_address")
+	@Email(message = "ej en giltig Email-adress")
+	private String email;
 
-    @Column(name = "phone-number")
-    @Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$")
-    @NotBlank
-    private String phoneNumber;
+	@Column(nullable = false, name = "phone_number")
+	@Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$")
+	private String phoneNumber;
 
-    @Column(name = "municipality-id")
-    @ValidMunicipalityId
-    @NotBlank
-    private String municipalityId;
+	@Column(nullable = false, name = "municipality_id")
+	@ValidMunicipalityId
+	private String municipalityId;
 
-    @Column(name = "status", columnDefinition = "ENUM")
-    private String status;
+	@Column(nullable = false, name = "status", columnDefinition = "ENUM")
+	private String status;
 
-    public UserEntity() {}
-    public UserEntity(String id, String email, String phoneNumber, String municipalityId, String status) {
-        this.id = id;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.municipalityId = municipalityId;
-        this.status = status;
-    }
+	public UserEntity() {}
 
-    public static UserEntity create(){
-        return new UserEntity();
-    }
+	public UserEntity(String id, String email, String phoneNumber, String municipalityId, String status) {
+		this.id = id;
+		this.email = email;
+		this.phoneNumber = phoneNumber;
+		this.municipalityId = municipalityId;
+		this.status = status;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public static UserEntity create() {
+		return new UserEntity();
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public UserEntity withId(final String id){
-        this.id = id;
-        return this;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public UserEntity withId(final String id) {
+		this.id = id;
+		return this;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public UserEntity withEmail(String email){
-        setEmail(email);
-        return this;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+	public UserEntity withEmail(String email) {
+		setEmail(email);
+		return this;
+	}
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
 
-    public UserEntity withPhoneNumber(String phoneNumber){
-        setPhoneNumber(phoneNumber);
-        return this;
-    }
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
-    public String getMunicipalityId() {
-        return municipalityId;
-    }
+	public UserEntity withPhoneNumber(String phoneNumber) {
+		setPhoneNumber(phoneNumber);
+		return this;
+	}
 
-    public void setMunicipalityId(String municipalityId) {
-        this.municipalityId = municipalityId;
-    }
+	public String getMunicipalityId() {
+		return municipalityId;
+	}
 
-    public UserEntity withMunicipalityId(String municipalityId){
-        setMunicipalityId(municipalityId);
-        return this;
-    }
+	public void setMunicipalityId(String municipalityId) {
+		this.municipalityId = municipalityId;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public UserEntity withMunicipalityId(String municipalityId) {
+		setMunicipalityId(municipalityId);
+		return this;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public UserEntity withStatus(String status){
-        setStatus(status);
-        return this;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public UserEntity withStatus(String status) {
+		setStatus(status);
+		return this;
+	}
 }

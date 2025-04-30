@@ -1,7 +1,7 @@
 CREATE TABLE users (
     guid VARCHAR(100) NOT NULL DEFAULT (UUID()),
-    `email-address` VARCHAR(50) NOT NULL PRIMARY KEY,
-    `phone-number` VARCHAR(15),
-     `municipality-id` VARCHAR(50),
-    `status` ENUM('ACTIVE', 'SUSPENDED', 'INACTIVE')
+    email_address VARCHAR(50) NOT NULL PRIMARY KEY,
+    phone_number_ VARCHAR(15),
+	municipality_id VARCHAR(50),
+    status ENUM('ACTIVE', 'SUSPENDED', 'INACTIVE')
 );
