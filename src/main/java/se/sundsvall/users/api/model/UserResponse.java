@@ -2,6 +2,8 @@ package se.sundsvall.users.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.Objects;
+
 public class UserResponse {
 
 	@Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
@@ -67,5 +69,24 @@ public class UserResponse {
 	public UserResponse withStatus(String status) {
 		this.status = status;
 		return this;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(municipalityId, email, phoneNumber, status);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		UserResponse that = (UserResponse) o;
+		return Objects.equals(email, that.email) && Objects.equals(phoneNumber, that.phoneNumber)
+			&& Objects.equals(status, that.status) && Objects.equals(municipalityId, that.municipalityId);
+
 	}
 }
