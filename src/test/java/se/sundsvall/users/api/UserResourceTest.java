@@ -56,8 +56,8 @@ public class UserResourceTest {
 			.getResponseBody();
 
 		// Assert
-		assertThat(response).isEqualTo(null);
-		verify(userServiceMock).createUser(refEq(userRequest)); // Verifiera att det är correkt verifierat
+		assertThat(response).isEqualTo(null); // ska resultatet returnera eller fungerar det med void?
+		verify(userServiceMock).createUser(userRequest);
 
 	}
 

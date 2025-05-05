@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.UserRepository;
@@ -18,6 +19,7 @@ import se.sundsvall.users.service.Mapper.UserMapper;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.*;
@@ -92,5 +94,32 @@ public class UserServiceTest {
 		// assertThat(userRequestMock).isEqualTo(userEntity);
 		// assertThat(createdUser).isEqualTo(userEntity);
 
+	}
+	@Test
+	void updateUserNotFound() {
+		// Arrange
+		final var email = "TestMail123@mail.se";
+		final var requet = UpdateUserRequest.create();
+
+		//Mock
+		when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
+		final var problem = assertThrows(Throwable.class, () -> userService.updateUser(requet, email));
+
+		// Assert
+		assertThat(problem).hasMessage("Not Found: user " + email + " was not found");
+		assertThat(problem).isNotNull();
+	}
+	@Test
+	void deleteUserNotFound() {
+		// Arrange
+		final var email = "TestMail123@mail.se";
+
+		// Mock
+		when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
+		final var problem = assertThrows(Throwable.class, () -> userService.deleteUser(email));
+
+		// Assert
+		assertThat(problem).hasMessage("Not Found: user " + email + " was not found");
+		assertThat(problem).isNotNull();
 	}
 }

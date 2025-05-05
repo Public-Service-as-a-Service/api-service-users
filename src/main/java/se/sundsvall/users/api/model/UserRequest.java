@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 
+import java.util.Objects;
+
 public class UserRequest {
 
 	@Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
@@ -81,5 +83,21 @@ public class UserRequest {
 	public UserRequest withStatus(String status) {
 		this.status = status;
 		return this;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(municipalityId, email, phoneNumber, status);
+	}
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		UserRequest that = (UserRequest) o;
+		return Objects.equals(email, that.email) && Objects.equals(phoneNumber, that.phoneNumber)
+				&& Objects.equals(status, that.status) && Objects.equals(municipalityId, that.municipalityId);
 	}
 }

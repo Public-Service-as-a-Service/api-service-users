@@ -70,6 +70,6 @@ public class UserService {
 
 			return userMapper.toUserResponse(userEntity);
 		}
-		throw Problem.valueOf(NOT_FOUND, format("user with %s was not found", email));
+		throw Problem.valueOf(NOT_FOUND, format("user %s was not found", email));
 	}
 }
