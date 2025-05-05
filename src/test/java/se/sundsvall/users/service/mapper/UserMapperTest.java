@@ -1,13 +1,10 @@
-package se.sundsvall.users.service.mapper;
+package se.sundsvall.users.service.Mapper;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import se.sundsvall.users.api.model.UserRequest;
+import se.sundsvall.users.api.model.User;
 import se.sundsvall.users.integration.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
 
@@ -33,7 +30,7 @@ public class UserMapperTest {
 			.withStatus(status);
 
 		// Act
-		final var result = userMapper.toUserResponse(userEntity);
+		final var result = userMapper.toUserResponse(userEntity, email);
 
 		// Assert
 		assertThat(result).isNotNull();
@@ -51,12 +48,12 @@ public class UserMapperTest {
 		final var municipalityId = "2281";
 		final var status = "Active";
 
-		final var userRequest = UserRequest.create().withEmail(email)
+		final var userRequest = User.create().withEmail(email)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
 			.withStatus(status);
 		// Act
-		final var result = userMapper.toUserEntity(userRequest);
+		final var result = userMapper.toUserEntity(userRequest, email);
 		// Assert
 		assertThat(result).isNotNull();
 		assertThat(result.getEmail()).isEqualTo(email);

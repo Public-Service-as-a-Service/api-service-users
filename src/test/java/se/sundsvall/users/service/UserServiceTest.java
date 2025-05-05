@@ -1,17 +1,11 @@
 package se.sundsvall.users.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.sundsvall.users.api.model.UpdateUserRequest;
-import se.sundsvall.users.api.model.UserRequest;
-import se.sundsvall.users.api.model.UserResponse;
+import se.sundsvall.users.api.model.User;
 import se.sundsvall.users.integration.UserRepository;
 import se.sundsvall.users.integration.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
@@ -41,11 +35,11 @@ public class UserServiceTest {
 		// Arrange
 		final var email = "Test123@mail.com";
 		final var userEntity = UserEntity.create().withId(email);
-		final var expectedUser = new UserResponse();
+		final var expectedUser = new User();
 
 		when(userRepositoryMock.findById(email)).thenReturn(Optional.of(userEntity));
 		when(userRepositoryMock.getReferenceById(email)).thenReturn(userEntity);
-		when(userMapper.toUserResponse(userEntity)).thenReturn(expectedUser);
+		when(userMapper.toUserResponse(userEntity, email)).thenReturn(expectedUser);
 
 		// Act
 		final var result = userService.getUserByEmail(email);
@@ -54,7 +48,7 @@ public class UserServiceTest {
 		assertThat(result).isSameAs(expectedUser);
 		verify(userRepositoryMock).findById(email);
 		verify(userRepositoryMock).getReferenceById(email);
-		verify(userMapper).toUserResponse(userEntity);
+		verify(userMapper).toUserResponse(userEntity, email);
 
 	}
 
@@ -65,7 +59,7 @@ public class UserServiceTest {
 		final var phoneNumber = "99070121212";
 		final var municipalityId = "2281";
 		final var status = "Active";
-		final var userRequestMock = UserRequest.create().withEmail(id)
+		final var userRequestMock = User.create().withEmail(id)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
 			.withStatus(status);
@@ -73,7 +67,7 @@ public class UserServiceTest {
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
 			.withStatus(status);
-		final var userResponseMock = UserResponse.create().withEmail(id)
+		final var userResponseMock = User.create().withEmail(id)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
 			.withStatus(status);
@@ -81,11 +75,11 @@ public class UserServiceTest {
 		when(userRepositoryMock.save(userEntity)).thenReturn(userEntity);
 		when(userRepositoryMock.findById(id)).thenReturn(Optional.empty());
 
-		when(userMapper.toUserEntity(userRequestMock)).thenReturn(userEntity);
-		when(userMapper.toUserResponse(userEntity)).thenReturn(userResponseMock);
+		when(userMapper.toUserEntity(userRequestMock, id)).thenReturn(userEntity);
+		when(userMapper.toUserResponse(userEntity, id)).thenReturn(userResponseMock);
 
 		// Act
-		final var createdUser = userService.createUser(userRequestMock);
+		final var createdUser = userService.createUser(userRequestMock, id);
 
 		// Assert
 		verify(userRepositoryMock).save(same(userEntity));
@@ -95,13 +89,14 @@ public class UserServiceTest {
 		// assertThat(createdUser).isEqualTo(userEntity);
 
 	}
+
 	@Test
 	void updateUserNotFound() {
 		// Arrange
 		final var email = "TestMail123@mail.se";
-		final var requet = UpdateUserRequest.create();
+		final var requet = User.create();
 
-		//Mock
+		// Mock
 		when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
 		final var problem = assertThrows(Throwable.class, () -> userService.updateUser(requet, email));
 
@@ -109,6 +104,7 @@ public class UserServiceTest {
 		assertThat(problem).hasMessage("Not Found: user " + email + " was not found");
 		assertThat(problem).isNotNull();
 	}
+
 	@Test
 	void deleteUserNotFound() {
 		// Arrange

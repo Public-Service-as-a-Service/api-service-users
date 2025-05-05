@@ -11,9 +11,9 @@ openapi:
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/user_management
-    username: root
-    password: root
+    url: jdbc:mariadb://localhost:3307/user_management
+    username: user-manager
+    password: admin
   jpa:
     hibernate:
       ddl-auto: update

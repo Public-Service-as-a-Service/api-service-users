@@ -8,16 +8,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.sundsvall.users.Application;
-import se.sundsvall.users.api.model.UpdateUserRequest;
-import se.sundsvall.users.api.model.UserRequest;
-import se.sundsvall.users.api.model.UserResponse;
+import se.sundsvall.users.api.model.User;
 import se.sundsvall.users.service.UserService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("junit")
@@ -29,42 +26,42 @@ public class UserResourceTest {
 
 	@Autowired
 	private WebTestClient webTestClient;
+
 	// Se om det ska vara en void metod eller om vi ska retunera ett respone
 	@Test
 	void saveUser() {
-
-		final var userRequest = UserRequest.create()
-			.withEmail("test@test.com")
+		final String email = "test@test.com";
+		final var userRequest = User.create()
 			.withMunicipalityId("2281")
 			.withPhoneNumber("0703423521")
 			.withStatus("active");
-		final var userResponse = UserResponse.create()
-			.withEmail("test@test.com")
+		final var userResponse = User.create()
+			.withEmail(email)
 			.withMunicipalityId("2281")
 			.withPhoneNumber("0703423521")
 			.withStatus("active");
 
-		when(userServiceMock.createUser(any(UserRequest.class))).thenReturn(userResponse);
+		when(userServiceMock.createUser(any(User.class), email)).thenReturn(userResponse);
 		var response = webTestClient.post()
 			.uri("/api/users")
 			.contentType(MediaType.APPLICATION_JSON)
 			.bodyValue(userRequest)
 			.exchange()
 			.expectStatus().isOk()
-			.expectBody(UserResponse.class)
+			.expectBody(User.class)
 			.returnResult()
 			.getResponseBody();
 
 		// Assert
 		assertThat(response).isEqualTo(null); // ska resultatet returnera eller fungerar det med void?
-		verify(userServiceMock).createUser(userRequest);
+		verify(userServiceMock).createUser(userRequest, email);
 
 	}
 
 	@Test
 	void getUserByEmail() { // Detta funkar RÖR EJ!!!
 		final var email = "kalle.kula@sundsvall.se";
-		final var userResponse = UserResponse.create()
+		final var userResponse = User.create()
 			.withEmail(email)
 			.withMunicipalityId("2281")
 			.withPhoneNumber("0703423521")
@@ -76,7 +73,7 @@ public class UserResourceTest {
 			.uri("/api/users/{email}", email)
 			.exchange()
 			.expectStatus().isOk()
-			.expectBody(UserResponse.class)
+			.expectBody(User.class)
 			.returnResult()
 			.getResponseBody();
 
@@ -87,24 +84,24 @@ public class UserResourceTest {
 	@Test
 	void updateUser() {
 		final var email = "test@test.com";
-		final var userRequest = UpdateUserRequest.create()
+		final var userRequest = User.create()
 			.withMunicipalityId("2281")
 			.withPhoneNumber("0703423521")
 			.withStatus("active");
-		final var userResponse = UserResponse.create()
+		final var userResponse = User.create()
 			.withEmail(email)
 			.withMunicipalityId("2281")
 			.withPhoneNumber("0703423521")
 			.withStatus("active");
 
-		when(userServiceMock.updateUser(any(UpdateUserRequest.class), eq(email))).thenReturn(userResponse);
+		when(userServiceMock.updateUser(any(User.class), eq(email))).thenReturn(userResponse);
 
 		final var response = webTestClient.put()
 			.uri("/api/users/{email}", email)
 			.bodyValue(userRequest)
 			.exchange()
 			.expectStatus().isOk()
-			.expectBody(UserResponse.class)
+			.expectBody(User.class)
 			.returnResult()
 			.getResponseBody();
 
@@ -122,7 +119,7 @@ public class UserResourceTest {
 			.uri("/api/users/{email}", email)
 			.exchange()
 			.expectStatus().isOk()
-			.expectBody(UserResponse.class)
+			.expectBody(User.class)
 			.returnResult()
 			.getResponseBody();
 

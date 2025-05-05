@@ -11,9 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.zalando.problem.Problem;
 import org.zalando.problem.violations.ConstraintViolationProblem;
-import se.sundsvall.users.api.model.UpdateUserRequest;
-import se.sundsvall.users.api.model.UserRequest;
-import se.sundsvall.users.api.model.UserResponse;
+import se.sundsvall.users.api.model.User;
 import se.sundsvall.users.service.UserService;
 
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
@@ -33,22 +31,24 @@ public class UserResource {
 	public UserResource(UserService userService) {
 		this.userService = userService;
 	}
+
 	// Se om det ska vara en void metod eller om vi ska retunera ett respone
-	@PostMapping("users")
-	public void saveUser(@RequestBody @Valid UserRequest userRequest) {
-		userService.createUser(userRequest);
+	@PostMapping("users/")
+	public void saveUser(@RequestBody @Valid User userRequest, @Email String email) {
+
+		userService.createUser(userRequest, email);
 	}
 
 	@GetMapping("users/{email}")
 	@ExceptionHandler(UsernameNotFoundException.class)
-	public ResponseEntity<UserResponse> getUserByEmail(@Valid @Email @PathVariable String email) {
+	public ResponseEntity<User> getUserByEmail(@Valid @Email @PathVariable String email) {
 		var user = userService.getUserByEmail(email);
 		return user != null ? ok(user) : ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("users/{email}")
 	@Validated
-	public ResponseEntity<UserResponse> updateUser(@Email @PathVariable String email, @RequestBody @Valid UpdateUserRequest userRequest) {
+	public ResponseEntity<User> updateUser(@Email @PathVariable String email, @RequestBody @Valid User userRequest) {
 		var user = userService.updateUser(userRequest, email);
 		return user != null ? ok(user) : ResponseEntity.noContent().build();
 	}

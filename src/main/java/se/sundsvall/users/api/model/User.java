@@ -8,11 +8,10 @@ import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 
 import java.util.Objects;
 
-public class UserRequest {
+public class User {
 
-	@Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
+	@Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se", accessMode = Schema.AccessMode.READ_ONLY)
 	@Email(message = "must be a valid Email-adress")
-	@NotBlank
 	private String email;
 
 	@Schema(description = "Telefonnummer", example = "0701234567")
@@ -29,8 +28,8 @@ public class UserRequest {
 	@NotBlank(message = "status must be Active, Suspended or Inactive")
 	private String status;
 
-	public static UserRequest create() {
-		return new UserRequest();
+	public static User create() {
+		return new User();
 	}
 
 	public String getEmail() {
@@ -41,7 +40,7 @@ public class UserRequest {
 		this.email = email;
 	}
 
-	public UserRequest withEmail(String email) {
+	public User withEmail(String email) {
 		this.email = email;
 		return this;
 	}
@@ -54,7 +53,7 @@ public class UserRequest {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public UserRequest withPhoneNumber(String phoneNumber) {
+	public User withPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 		return this;
 	}
@@ -67,7 +66,7 @@ public class UserRequest {
 		this.municipalityId = municipalityId;
 	}
 
-	public UserRequest withMunicipalityId(String municipalityId) {
+	public User withMunicipalityId(String municipalityId) {
 		this.municipalityId = municipalityId;
 		return this;
 	}
@@ -80,14 +79,16 @@ public class UserRequest {
 		this.status = status;
 	}
 
-	public UserRequest withStatus(String status) {
+	public User withStatus(String status) {
 		this.status = status;
 		return this;
 	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(municipalityId, email, phoneNumber, status);
 	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -96,8 +97,8 @@ public class UserRequest {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		UserRequest that = (UserRequest) o;
+		User that = (User) o;
 		return Objects.equals(email, that.email) && Objects.equals(phoneNumber, that.phoneNumber)
-				&& Objects.equals(status, that.status) && Objects.equals(municipalityId, that.municipalityId);
+			&& Objects.equals(status, that.status) && Objects.equals(municipalityId, that.municipalityId);
 	}
 }

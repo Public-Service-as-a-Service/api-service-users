@@ -9,7 +9,7 @@ import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetter
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
 
-public class UpdateUserRequestTest {
+public class UserTest {
 
 	@Test
 	void testBean() {
@@ -20,15 +20,18 @@ public class UpdateUserRequestTest {
 
 	@Test
 	void testBuildMethod() {
+		final var email = "email";
 		final var phoneNumber = "phoneNumber";
 		final var municipalityId = "municipalityId";
 		final var status = "status";
 
 		final var userEntity = UserEntity.create()
+			.withEmail(email)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
 			.withStatus(status);
 
+		assertThat(userEntity.getEmail()).isEqualTo(email);
 		assertThat(userEntity.getPhoneNumber()).isEqualTo(phoneNumber);
 		assertThat(userEntity.getMunicipalityId()).isEqualTo(municipalityId);
 		assertThat(userEntity.getStatus()).isEqualTo(status);
@@ -36,6 +39,6 @@ public class UpdateUserRequestTest {
 
 	@Test
 	void testNoDirtOnCreatedBean() {
-		assertThat(UserResponse.create()).hasAllNullFieldsOrProperties();
+		assertThat(User.create()).hasAllNullFieldsOrProperties();
 	}
 }
