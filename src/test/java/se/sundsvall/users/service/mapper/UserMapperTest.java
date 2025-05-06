@@ -30,7 +30,7 @@ public class UserMapperTest {
 			.withStatus(status);
 
 		// Act
-		final var result = userMapper.toUserResponse(userEntity, email);
+		final var result = userMapper.toUserResponse(userEntity);
 
 		// Assert
 		assertThat(result).isNotNull();

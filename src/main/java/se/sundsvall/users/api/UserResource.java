@@ -33,10 +33,11 @@ public class UserResource {
 	}
 
 	// Se om det ska vara en void metod eller om vi ska retunera ett respone
-	@PostMapping("users/")
-	public void saveUser(@RequestBody @Valid User userRequest, @Email String email) {
+	@PostMapping("users/{email}")
+	public ResponseEntity<Void> saveUser(@RequestBody @Valid User userRequest, @PathVariable @Valid @Email String email) {
 
 		userService.createUser(userRequest, email);
+		return ok().build();
 	}
 
 	@GetMapping("users/{email}")

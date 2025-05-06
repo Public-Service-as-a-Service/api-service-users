@@ -39,7 +39,7 @@ public class UserServiceTest {
 
 		when(userRepositoryMock.findById(email)).thenReturn(Optional.of(userEntity));
 		when(userRepositoryMock.getReferenceById(email)).thenReturn(userEntity);
-		when(userMapper.toUserResponse(userEntity, email)).thenReturn(expectedUser);
+		when(userMapper.toUserResponse(userEntity)).thenReturn(expectedUser);
 
 		// Act
 		final var result = userService.getUserByEmail(email);
@@ -48,7 +48,7 @@ public class UserServiceTest {
 		assertThat(result).isSameAs(expectedUser);
 		verify(userRepositoryMock).findById(email);
 		verify(userRepositoryMock).getReferenceById(email);
-		verify(userMapper).toUserResponse(userEntity, email);
+		verify(userMapper).toUserResponse(userEntity);
 
 	}
 
@@ -76,7 +76,7 @@ public class UserServiceTest {
 		when(userRepositoryMock.findById(id)).thenReturn(Optional.empty());
 
 		when(userMapper.toUserEntity(userRequestMock, id)).thenReturn(userEntity);
-		when(userMapper.toUserResponse(userEntity, id)).thenReturn(userResponseMock);
+		when(userMapper.toUserResponse(userEntity)).thenReturn(userResponseMock);
 
 		// Act
 		final var createdUser = userService.createUser(userRequestMock, id);
@@ -94,11 +94,11 @@ public class UserServiceTest {
 	void updateUserNotFound() {
 		// Arrange
 		final var email = "TestMail123@mail.se";
-		final var requet = User.create();
+		final var request = User.create();
 
 		// Mock
 		when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
-		final var problem = assertThrows(Throwable.class, () -> userService.updateUser(requet, email));
+		final var problem = assertThrows(Throwable.class, () -> userService.updateUser(request, email));
 
 		// Assert
 		assertThat(problem).hasMessage("Not Found: user " + email + " was not found");

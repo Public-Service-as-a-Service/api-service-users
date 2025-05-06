@@ -41,9 +41,9 @@ public class UserResourceTest {
 			.withPhoneNumber("0703423521")
 			.withStatus("active");
 
-		when(userServiceMock.createUser(any(User.class), email)).thenReturn(userResponse);
+		when(userServiceMock.createUser(any(User.class), eq(email))).thenReturn(userResponse);
 		var response = webTestClient.post()
-			.uri("/api/users")
+			.uri("/api/users/{email}", email)
 			.contentType(MediaType.APPLICATION_JSON)
 			.bodyValue(userRequest)
 			.exchange()

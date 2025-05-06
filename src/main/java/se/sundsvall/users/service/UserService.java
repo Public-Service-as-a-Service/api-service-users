@@ -30,7 +30,7 @@ public class UserService {
 		if (userRepository.findById(email).isEmpty()) {
 			final var userEntity = userRepository.save(userMapper.toUserEntity(userRequest, email));
 
-			return userMapper.toUserResponse(userEntity, email);
+			return userMapper.toUserResponse(userEntity);
 		}
 		throw Problem.valueOf(CONFLICT, format("user %s already exist", userRequest.getEmail()));
 	}
@@ -40,7 +40,7 @@ public class UserService {
 		if (userRepository.findById(email).isPresent()) {
 			UserEntity userEntity = userRepository.getReferenceById(email);
 
-			return userMapper.toUserResponse(userEntity, email);
+			return userMapper.toUserResponse(userEntity);
 		}
 		throw Problem.valueOf(NOT_FOUND, format("user %s was not found", email));
 	}
@@ -55,7 +55,7 @@ public class UserService {
 			userEntity.setStatus(userRequest.getStatus());
 			userRepository.save(userEntity);
 
-			return userMapper.toUserResponse(userEntity, email);
+			return userMapper.toUserResponse(userEntity);
 		}
 		throw Problem.valueOf(NOT_FOUND, format("user %s was not found", email));
 	}
@@ -66,7 +66,7 @@ public class UserService {
 			var userEntity = userRepository.getReferenceById(email);
 			userRepository.deleteById(email);
 
-			return userMapper.toUserResponse(userEntity, email);
+			return userMapper.toUserResponse(userEntity);
 		}
 		throw Problem.valueOf(NOT_FOUND, format("user %s was not found", email));
 	}

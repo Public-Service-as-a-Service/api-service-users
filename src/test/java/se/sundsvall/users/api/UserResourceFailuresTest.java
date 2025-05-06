@@ -7,10 +7,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 
+import org.zalando.problem.violations.Violation;
 import se.sundsvall.users.Application;
 import se.sundsvall.users.api.model.User;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 import static org.zalando.problem.Status.BAD_REQUEST;
@@ -25,15 +27,16 @@ public class UserResourceFailuresTest {
 	@Test
 	void saveUserWithBadRequest() {
 		// Arrange
-		final var userRequest = new User()
-			.withEmail("kallekula")
+		final String email = "testom";
+		final var userRequest = User.create()
+			.withEmail(email)
 			.withPhoneNumber("ej3di352")
 			.withMunicipalityId("23ve45")
 			.withStatus("oklart");
 
 		// Act
 		final var response = webTestClient.post()
-			.uri("/api/users")
+			.uri("/api/users/{email}", email)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(userRequest)
 			.exchange()

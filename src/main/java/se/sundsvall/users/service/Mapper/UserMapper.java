@@ -9,10 +9,10 @@ import java.util.Optional;
 @Component
 public class UserMapper {
 
-	public User toUserResponse(final UserEntity user, final String email) {
+	public User toUserResponse(final UserEntity user) {
 		return Optional.ofNullable(user)
 			.map(entity -> User.create()
-				.withEmail(email)
+				.withEmail(entity.getEmail())
 				.withPhoneNumber(entity.getPhoneNumber())
 				.withMunicipalityId(entity.getMunicipalityId())
 				.withStatus(entity.getStatus()))
