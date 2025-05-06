@@ -29,6 +29,7 @@ public class UserResourceTest {
 
 	@Autowired
 	private WebTestClient webTestClient;
+
 	// Se om det ska vara en void metod eller om vi ska retunera ett respone
 	@Test
 	void saveUser() {

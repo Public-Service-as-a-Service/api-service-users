@@ -33,6 +33,7 @@ public class UserResource {
 	public UserResource(UserService userService) {
 		this.userService = userService;
 	}
+
 	// Se om det ska vara en void metod eller om vi ska retunera ett respone
 	@PostMapping("users")
 	public void saveUser(@RequestBody @Valid UserRequest userRequest) {

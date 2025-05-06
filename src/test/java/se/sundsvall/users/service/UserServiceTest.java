@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.zalando.problem.Problem;
 import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
@@ -19,6 +20,7 @@ import se.sundsvall.users.service.Mapper.UserMapper;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.sisu.inject.Logs.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
@@ -91,24 +93,65 @@ public class UserServiceTest {
 		verify(userRepositoryMock).save(same(userEntity));
 		assertThat(createdUser).isNotNull();
 		assertThat(createdUser).isEqualTo(userResponseMock);
-		// assertThat(userRequestMock).isEqualTo(userEntity);
-		// assertThat(createdUser).isEqualTo(userEntity);
 
 	}
+
+	@Test
+	void createUserAlreadyExists() {
+		// Arrange
+		final var email = "TestMail123@mail.se";
+		final var userRequest = new UserRequest();
+		userRequest.setEmail(email);
+
+		when(userRepositoryMock.findById(email)).thenReturn(Optional.of(new UserEntity()));
+
+		// Act & Assert
+		final var exception = assertThrows(Throwable.class, () -> userService.createUser(userRequest));
+
+		assertThat((exception))
+			.isInstanceOf(Problem.class)
+			.hasMessageContaining("user " + email + " already exist");
+
+		verify(userRepositoryMock).findById(email);
+		verify(userRepositoryMock, never()).save(any());
+		verifyNoMoreInteractions(userRepositoryMock, userMapper);
+	}
+
+	@Test
+	void getUserByEmailNotFound() {
+		// Arrange
+		final var email = "Testmail123@mail.com";
+
+		when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
+
+		// Act
+		final var exception = assertThrows(Throwable.class, () -> userService.getUserByEmail(email));
+		// Assert
+		assertThat(exception)
+			.isInstanceOf(Problem.class)
+			.hasMessageContaining("user " + email + " was not found");
+
+		verify(userRepositoryMock).findById(email);
+		verify(userRepositoryMock, never()).getReferenceById(any());
+		verify(userMapper, never()).toUserResponse(any());
+		verifyNoMoreInteractions(userRepositoryMock, userMapper);
+	}
+
 	@Test
 	void updateUserNotFound() {
 		// Arrange
 		final var email = "TestMail123@mail.se";
-		final var requet = UpdateUserRequest.create();
+		final var request = UpdateUserRequest.create();
 
-		//Mock
+		// Mock
 		when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
-		final var problem = assertThrows(Throwable.class, () -> userService.updateUser(requet, email));
+		final var problem = assertThrows(Throwable.class, () -> userService.updateUser(request, email));
 
 		// Assert
 		assertThat(problem).hasMessage("Not Found: user " + email + " was not found");
 		assertThat(problem).isNotNull();
 	}
+
 	@Test
 	void deleteUserNotFound() {
 		// Arrange
@@ -122,4 +165,5 @@ public class UserServiceTest {
 		assertThat(problem).hasMessage("Not Found: user " + email + " was not found");
 		assertThat(problem).isNotNull();
 	}
+
 }

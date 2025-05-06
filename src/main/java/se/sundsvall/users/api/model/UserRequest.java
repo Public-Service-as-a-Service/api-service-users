@@ -84,10 +84,12 @@ public class UserRequest {
 		this.status = status;
 		return this;
 	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(municipalityId, email, phoneNumber, status);
 	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -98,6 +100,6 @@ public class UserRequest {
 		}
 		UserRequest that = (UserRequest) o;
 		return Objects.equals(email, that.email) && Objects.equals(phoneNumber, that.phoneNumber)
-				&& Objects.equals(status, that.status) && Objects.equals(municipalityId, that.municipalityId);
+			&& Objects.equals(status, that.status) && Objects.equals(municipalityId, that.municipalityId);
 	}
 }

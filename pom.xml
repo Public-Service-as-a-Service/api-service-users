@@ -32,7 +32,6 @@
 			<groupId>se.sundsvall.dept44</groupId>
 			<artifactId>dept44-common-validators</artifactId>
 		</dependency>
-		
 
 		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
 		<dependency>
@@ -47,6 +46,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 
 </project>
