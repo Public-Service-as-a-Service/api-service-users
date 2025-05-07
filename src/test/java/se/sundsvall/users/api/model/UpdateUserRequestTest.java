@@ -22,7 +22,7 @@ public class UpdateUserRequestTest {
 	void testBuildMethod() {
 		final var phoneNumber = "phoneNumber";
 		final var municipalityId = "municipalityId";
-		final var status = "status";
+		final var status = "ACTIVE";
 
 		final var userEntity = UserEntity.create()
 			.withPhoneNumber(phoneNumber)

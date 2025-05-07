@@ -1,9 +1,13 @@
 package se.sundsvall.users.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
+import se.sundsvall.users.api.validation.ValidEnum;
+import se.sundsvall.users.integration.model.Enum.Status;
 
 public class UpdateUserRequest {
 
@@ -18,7 +22,7 @@ public class UpdateUserRequest {
 	private String municipalityId;
 
 	@Schema(description = "Status", example = "ACTIVE")
-	@NotBlank(message = "Status must be Active, Suspended or Inactive")
+	@ValidEnum(enumClass = Status.class)
 	private String status;
 
 	public static UpdateUserRequest create() {

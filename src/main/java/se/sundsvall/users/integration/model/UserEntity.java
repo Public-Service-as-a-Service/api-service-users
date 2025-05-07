@@ -2,10 +2,10 @@ package se.sundsvall.users.integration.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.UuidGenerator;
 import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
+import se.sundsvall.users.integration.model.Enum.Status;
 
 import java.io.Serializable;
 

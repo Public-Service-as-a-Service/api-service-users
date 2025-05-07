@@ -11,6 +11,7 @@ import se.sundsvall.users.Application;
 import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
+import se.sundsvall.users.integration.model.Enum.Status;
 import se.sundsvall.users.service.UserService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,12 +39,12 @@ public class UserResourceTest {
 			.withEmail("test@test.com")
 			.withMunicipalityId("2281")
 			.withPhoneNumber("0703423521")
-			.withStatus("active");
+			.withStatus("ACTIVE");
 		final var userResponse = UserResponse.create()
 			.withEmail("test@test.com")
 			.withMunicipalityId("2281")
 			.withPhoneNumber("0703423521")
-			.withStatus("active");
+			.withStatus("ACTIVE");
 
 		when(userServiceMock.createUser(any(UserRequest.class))).thenReturn(userResponse);
 		var response = webTestClient.post()
@@ -69,7 +70,7 @@ public class UserResourceTest {
 			.withEmail(email)
 			.withMunicipalityId("2281")
 			.withPhoneNumber("0703423521")
-			.withStatus("active");
+			.withStatus("ACTIVE");
 
 		when(userServiceMock.getUserByEmail(email)).thenReturn(userResponse);
 
@@ -91,12 +92,12 @@ public class UserResourceTest {
 		final var userRequest = UpdateUserRequest.create()
 			.withMunicipalityId("2281")
 			.withPhoneNumber("0703423521")
-			.withStatus("active");
+			.withStatus("ACTIVE");
 		final var userResponse = UserResponse.create()
 			.withEmail(email)
 			.withMunicipalityId("2281")
 			.withPhoneNumber("0703423521")
-			.withStatus("active");
+			.withStatus("ACTIVE");
 
 		when(userServiceMock.updateUser(any(UpdateUserRequest.class), eq(email))).thenReturn(userResponse);
 

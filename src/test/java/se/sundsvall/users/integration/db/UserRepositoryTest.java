@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import se.sundsvall.users.integration.UserRepository;
+import se.sundsvall.users.integration.model.Enum.Status;
 import se.sundsvall.users.integration.model.UserEntity;
 
 import java.util.UUID;
