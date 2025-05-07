@@ -2,6 +2,7 @@ package se.sundsvall.users.api.model;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
+import se.sundsvall.users.integration.model.Status;
 import se.sundsvall.users.integration.model.UserEntity;
 
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
@@ -23,7 +24,7 @@ public class UserRequestTest {
 		final var email = "email";
 		final var phoneNumber = "phoneNumber";
 		final var municipalityId = "municipalityId";
-		final var status = "status";
+		final var status = Status.valueOf("ACTIVE");
 
 		final var userEntity = UserEntity.create()
 			.withEmail(email)

@@ -3,13 +3,16 @@ package se.sundsvall.users.api.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import se.sundsvall.dept44.common.validators.annotation.ValidMobileNumber;
 import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
+import se.sundsvall.users.integration.model.Status;
 
 public class UpdateUserRequest {
 
 	@Schema(description = "Telefonnummer", example = "0701234567")
 	@NotBlank(message = "must be a Phone-number")
-	@Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$")
+	// @Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$")
+	@ValidMobileNumber
 	private String phoneNumber;
 
 	@Schema(description = "Kommun", example = "2281")
@@ -18,8 +21,7 @@ public class UpdateUserRequest {
 	private String municipalityId;
 
 	@Schema(description = "Status", example = "ACTIVE")
-	@NotBlank(message = "Status must be Active, Suspended or Inactive")
-	private String status;
+	private Status status;
 
 	public static UpdateUserRequest create() {
 		return new UpdateUserRequest();
@@ -51,15 +53,15 @@ public class UpdateUserRequest {
 		return this;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
-	public UpdateUserRequest withStatus(String status) {
+	public UpdateUserRequest withStatus(Status status) {
 		this.status = status;
 		return this;
 	}

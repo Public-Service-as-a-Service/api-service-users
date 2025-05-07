@@ -1,6 +1,6 @@
 # Users
 
-_Manage users._
+_Service for managing users._
 
 ## Getting Started
 
@@ -72,8 +72,7 @@ Refer to the [API Documentation](#api-documentation) for detailed information on
 ### Example Request
 
 ```bash
-curl -X GET curl -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d "{\"email\": \"1\"}"
-```
+curl -X GET "http://localhost:8080/api/users/kalle.kula%40sundsvall.se" -H "accept: */*"```
 
 ## Configuration
 
@@ -86,7 +85,8 @@ Configuration is crucial for the application to run successfully. Ensure all nec
   ```yaml
   server:
     port: 8080
-  ```
+```
+
 - **Database Settings:**
 
   ```yaml

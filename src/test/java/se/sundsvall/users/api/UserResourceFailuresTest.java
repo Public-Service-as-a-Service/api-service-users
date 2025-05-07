@@ -9,6 +9,7 @@ import org.zalando.problem.violations.ConstraintViolationProblem;
 
 import se.sundsvall.users.Application;
 import se.sundsvall.users.api.model.UserRequest;
+import se.sundsvall.users.integration.model.Status;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -29,7 +30,7 @@ public class UserResourceFailuresTest {
 			.withEmail("kallekula")
 			.withPhoneNumber("ej3di352")
 			.withMunicipalityId("23ve45")
-			.withStatus("oklart");
+			.withStatus(Status.valueOf("ACTIVE"));
 
 		// Act
 		final var response = webTestClient.post()
@@ -89,7 +90,7 @@ public class UserResourceFailuresTest {
 			.withEmail(epost)
 			.withPhoneNumber("ej3di352")
 			.withMunicipalityId("23ve45")
-			.withStatus("oklart");
+			.withStatus(Status.valueOf("ACTIVE"));
 
 		// act
 		final var response = webTestClient.put().uri("/api/users/{email}", epost)

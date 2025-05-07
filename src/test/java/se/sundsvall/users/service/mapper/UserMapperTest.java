@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.sundsvall.users.api.model.UserRequest;
+import se.sundsvall.users.integration.model.Status;
 import se.sundsvall.users.integration.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
 
@@ -25,7 +26,7 @@ public class UserMapperTest {
 		final var email = "TestMail123@mail.se";
 		final var phoneNumber = "99070121212";
 		final var municipalityId = "2281";
-		final var status = "Active";
+		final var status = Status.valueOf("ACTIVE");
 
 		final var userEntity = UserEntity.create().withEmail(email)
 			.withPhoneNumber(phoneNumber)
@@ -49,7 +50,7 @@ public class UserMapperTest {
 		final var email = "TestMail123@mail.se";
 		final var phoneNumber = "99070121212";
 		final var municipalityId = "2281";
-		final var status = "Active";
+		final var status = Status.valueOf("ACTIVE");
 
 		final var userRequest = UserRequest.create().withEmail(email)
 			.withPhoneNumber(phoneNumber)

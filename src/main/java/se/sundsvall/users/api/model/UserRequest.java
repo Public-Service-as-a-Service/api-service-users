@@ -1,11 +1,20 @@
 package se.sundsvall.users.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import org.aspectj.bridge.Message;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ResponseBody;
+import se.sundsvall.dept44.common.validators.annotation.ValidMobileNumber;
 import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
+import se.sundsvall.users.integration.model.Status;
 
+import java.lang.annotation.Documented;
 import java.util.Objects;
 
 public class UserRequest {
@@ -17,7 +26,8 @@ public class UserRequest {
 
 	@Schema(description = "Telefonnummer", example = "0701234567")
 	@NotBlank(message = "must be a Phone-number")
-	@Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$")
+//	@Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$", message = must be in format xxx-xxxxxxx)
+	@ValidMobileNumber
 	private String phoneNumber;
 
 	@Schema(description = "Kommun", example = "2281")
@@ -26,8 +36,9 @@ public class UserRequest {
 	private String municipalityId;
 
 	@Schema(description = "Status", example = "ACTIVE")
-	@NotBlank(message = "status must be Active, Suspended or Inactive")
-	private String status;
+	// (message = "must be either ACTIVE, INACTIVE or SUSPENDED")
+	@Enumerated
+	private Status status;
 
 	public static UserRequest create() {
 		return new UserRequest();
@@ -72,15 +83,15 @@ public class UserRequest {
 		return this;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
-	public UserRequest withStatus(String status) {
+	public UserRequest withStatus(Status status) {
 		this.status = status;
 		return this;
 	}

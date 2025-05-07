@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.UuidGenerator;
+import se.sundsvall.dept44.common.validators.annotation.ValidMobileNumber;
 import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 
 import java.io.Serializable;
@@ -27,7 +28,8 @@ public class UserEntity implements Serializable {
 	private String email;
 
 	@Column(nullable = false, name = "phone_number")
-	@Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$")
+	// @Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$")
+	@ValidMobileNumber
 	private String phoneNumber;
 
 	@Column(nullable = false, name = "municipality_id")
@@ -35,11 +37,12 @@ public class UserEntity implements Serializable {
 	private String municipalityId;
 
 	@Column(nullable = false, name = "status", columnDefinition = "ENUM")
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
 	public UserEntity() {}
 
-	public UserEntity(String id, String email, String phoneNumber, String municipalityId, String status) {
+	public UserEntity(String id, String email, String phoneNumber, String municipalityId, Status status) {
 		this.id = id;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
@@ -103,15 +106,15 @@ public class UserEntity implements Serializable {
 		return this;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
-	public UserEntity withStatus(String status) {
+	public UserEntity withStatus(Status status) {
 		setStatus(status);
 		return this;
 	}

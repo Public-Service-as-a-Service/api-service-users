@@ -14,6 +14,7 @@ import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.UserRepository;
+import se.sundsvall.users.integration.model.Status;
 import se.sundsvall.users.integration.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
 
@@ -66,19 +67,19 @@ public class UserServiceTest {
 		final var id = "TestMail123@mail.se";
 		final var phoneNumber = "99070121212";
 		final var municipalityId = "2281";
-		final var status = "Active";
+		final var status = "ACTIVE";
 		final var userRequestMock = UserRequest.create().withEmail(id)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
-			.withStatus(status);
+			.withStatus(Status.valueOf(status));
 		final var userEntity = UserEntity.create().withEmail(id)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
-			.withStatus(status);
+			.withStatus(Status.valueOf(status));
 		final var userResponseMock = UserResponse.create().withEmail(id)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
-			.withStatus(status);
+			.withStatus(Status.valueOf(status));
 
 		when(userRepositoryMock.save(userEntity)).thenReturn(userEntity);
 		when(userRepositoryMock.findById(id)).thenReturn(Optional.empty());
@@ -94,6 +95,59 @@ public class UserServiceTest {
 		assertThat(createdUser).isNotNull();
 		assertThat(createdUser).isEqualTo(userResponseMock);
 
+	}
+
+	@Test
+	void updateUser() {
+		// Arrange
+		final var email = "TestMail123@mail.se";
+		final var phoneNumber = "0701235223";
+		final var municipalityId = "2281";
+		final var status = Status.valueOf("ACTIVE");
+		final var userRequestMock = UpdateUserRequest.create()
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus(status);
+		final var userEntity = UserEntity.create().withEmail(email)
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus(status);
+		final var userResponseMock = UserResponse.create().withEmail(email)
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus(status);
+		// Mock
+		when(userRepositoryMock.findById(email)).thenReturn(Optional.of(userEntity));
+		when(userRepositoryMock.getReferenceById(email)).thenReturn(userEntity);
+
+		when(userRepositoryMock.save(userEntity)).thenReturn(userEntity);
+		when(userMapper.toUserResponse(userEntity)).thenReturn(userResponseMock);
+
+		// Act
+		final var updatedUser = userService.updateUser(userRequestMock, email);
+
+		// Verify/Assert
+		verify(userRepositoryMock).save(same(userEntity));
+		assertThat(updatedUser).isNotNull();
+		assertThat(updatedUser).isEqualTo(userResponseMock);
+	}
+
+	@Test
+	void deleteUser() {
+
+		// Arrange
+		final var email = "TestMail123@mail.se";
+		final var userEntity = UserEntity.create().withEmail(email);
+
+		// Mock
+		when(userRepositoryMock.findById(email)).thenReturn(Optional.of(userEntity));
+		when(userRepositoryMock.getReferenceById(email)).thenReturn(userEntity);
+
+		// Act
+		userService.deleteUser(email);
+
+		// Verify/Assert
+		verify(userRepositoryMock).deleteById(email);
 	}
 
 	@Test

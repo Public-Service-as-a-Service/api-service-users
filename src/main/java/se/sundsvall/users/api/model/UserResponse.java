@@ -1,6 +1,7 @@
 package se.sundsvall.users.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import se.sundsvall.users.integration.model.Status;
 
 import java.util.Objects;
 
@@ -12,8 +13,8 @@ public class UserResponse {
 	private String phoneNumber;
 	@Schema(description = "Kommun-id", example = "2281")
 	private String municipalityId;
-	@Schema(description = "Stratus", example = "active")
-	private String status;
+	@Schema(description = "Stratus", example = "ACTIVE")
+	private Status status;
 
 	public static UserResponse create() {
 		return new UserResponse();
@@ -58,15 +59,15 @@ public class UserResponse {
 		return this;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
-	public UserResponse withStatus(String status) {
+	public UserResponse withStatus(Status status) {
 		this.status = status;
 		return this;
 	}
