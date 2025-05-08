@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.zalando.problem.Problem;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 import org.zalando.problem.violations.Violation;
 import se.sundsvall.users.Application;
 import se.sundsvall.users.api.model.UserRequest;
-import se.sundsvall.users.integration.model.Enum.Status;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
@@ -31,6 +29,7 @@ public class UserResourceFailuresTest {
 		// Arrange
 		final var userRequest = UserRequest.create()
 			.withEmail("testewom")
+			.withPhoneNumber("fgewrgr")
 			.withMunicipalityId("dew")
 			.withStatus("oklart");
 		// Act
@@ -54,8 +53,8 @@ public class UserResourceFailuresTest {
 			.containsExactlyInAnyOrder(
 				tuple("email", "must be a valid Email-adress"),
 				tuple("status", "must be ACTIVE, INACTIVE or SUSPENDED"),
-				tuple("phoneNumber", "must be a Phone-number"),
-				tuple("municipalityId", "not a valid municipality ID"));
+				tuple("phoneNumber", "must be a valid mobile number"),
+				tuple("municipalityId", "must be a valid Municipality-ID"));
 		// TODO verify response violation constraints
 
 	}
@@ -78,6 +77,10 @@ public class UserResourceFailuresTest {
 		assertThat(response).isNotNull();
 		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
 		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactlyInAnyOrder(
+				tuple("getUserByEmail.email", "must be a well-formed email address"));
 		// TODO verify response violation constraints
 
 	}
@@ -85,15 +88,16 @@ public class UserResourceFailuresTest {
 	@Test
 	void updateUserWithBadRequest() {
 		// Arrange
-		final String epost = "kalle.kula@sundsvall.se";
+		final String email = "test@gmail.com";
 		final var userRequest = UserRequest.create()
-			.withEmail(epost)
-			.withPhoneNumber("ej3di352")
-			.withMunicipalityId("23ve45")
-			.withStatus("active");
+			.withEmail(email)
+			.withPhoneNumber("numberplate")
+			.withMunicipalityId("municipalityId")
+			.withStatus("status");
 
 		// act
-		final var response = webTestClient.put().uri("/api/users/{email}", epost)
+		final var response = webTestClient.put().uri("/api/users/{email}", email)
+			.bodyValue(userRequest)
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
@@ -105,6 +109,12 @@ public class UserResourceFailuresTest {
 		assertThat(response).isNotNull();
 		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
 		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactlyInAnyOrder(
+				tuple("status", "must be ACTIVE, INACTIVE or SUSPENDED"),
+				tuple("phoneNumber", "must be a valid mobile number"),
+				tuple("municipalityId", "must be a valid Municipality-ID"));
 	}
 
 	@Test
@@ -126,6 +136,10 @@ public class UserResourceFailuresTest {
 		assertThat(response).isNotNull();
 		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
 		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactlyInAnyOrder(
+				tuple("deleteByEmail.email", "must be a well-formed email address"));
 		// TODO verify response violation constraints
 	}
 }

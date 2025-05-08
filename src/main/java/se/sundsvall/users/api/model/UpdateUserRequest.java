@@ -1,9 +1,11 @@
 package se.sundsvall.users.api.model;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import se.sundsvall.dept44.common.validators.annotation.ValidMobileNumber;
 import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 import se.sundsvall.users.api.validation.ValidEnum;
 import se.sundsvall.users.integration.model.Enum.Status;
@@ -11,17 +13,17 @@ import se.sundsvall.users.integration.model.Enum.Status;
 public class UpdateUserRequest {
 
 	@Schema(description = "Telefonnummer", example = "0701234567")
-	@NotBlank(message = "must be a Phone-number")
-	@Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$")
+	@NotBlank(message = "cannot be blank")
+	@ValidMobileNumber(message = "must be a valid mobile number")
 	private String phoneNumber;
 
 	@Schema(description = "Kommun", example = "2281")
-	@NotBlank(message = "must be a Municipality-ID")
-	@ValidMunicipalityId
+	@NotBlank(message = "cannot be blank")
+	@ValidMunicipalityId(message = "must be a valid Municipality-ID")
 	private String municipalityId;
 
 	@Schema(description = "Status", example = "ACTIVE")
-	@ValidEnum(enumClass = Status.class, ignoreCase = true)
+	@ValidEnum(message = "must be ACTIVE, INACTIVE or SUSPENDED", enumClass = Status.class, ignoreCase = true)
 	private String status;
 
 	public static UpdateUserRequest create() {

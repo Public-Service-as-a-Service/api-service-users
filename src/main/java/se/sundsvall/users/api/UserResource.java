@@ -49,7 +49,7 @@ public class UserResource {
 
 	@PutMapping("users/{email}")
 	@Validated
-	public ResponseEntity<UserResponse> updateUser(@Email @PathVariable String email, @RequestBody @Valid UpdateUserRequest userRequest) {
+	public ResponseEntity<UserResponse> updateUser(@Valid @Email @PathVariable String email, @RequestBody @Valid UpdateUserRequest userRequest) {
 		var user = userService.updateUser(userRequest, email);
 		return user != null ? ok(user) : ResponseEntity.noContent().build();
 	}

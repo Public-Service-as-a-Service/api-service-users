@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import se.sundsvall.dept44.common.validators.annotation.ValidMobileNumber;
 import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 import se.sundsvall.users.api.validation.ValidEnum;
 import se.sundsvall.users.api.validation.impl.EnumValidator;
@@ -17,17 +18,17 @@ public class UserRequest {
 
 	@Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
 	@Email(message = "must be a valid Email-adress")
-	@NotBlank
+	@NotBlank(message = "cannot be blank")
 	private String email;
 
 	@Schema(description = "Telefonnummer", example = "0701234567")
-	@NotBlank(message = "must be a Phone-number")
-	@Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$")
+	@NotBlank(message = "cannot be blank")
+	@ValidMobileNumber(message = "must be a valid mobile number")
 	private String phoneNumber;
 
 	@Schema(description = "Kommun", example = "2281")
-	@NotBlank(message = "must be a Municipality-ID")
-	@ValidMunicipalityId
+	@NotBlank(message = "cannot be blank")
+	@ValidMunicipalityId(message = "must be a valid Municipality-ID")
 	private String municipalityId;
 
 	@Schema(description = "Status", example = "ACTIVE")
