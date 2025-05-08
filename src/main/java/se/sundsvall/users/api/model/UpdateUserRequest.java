@@ -1,6 +1,7 @@
 package se.sundsvall.users.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import se.sundsvall.dept44.common.validators.annotation.ValidMobileNumber;
@@ -21,6 +22,7 @@ public class UpdateUserRequest {
 	private String municipalityId;
 
 	@Schema(description = "Status", example = "ACTIVE")
+	@Enumerated
 	private Status status;
 
 	public static UpdateUserRequest create() {
