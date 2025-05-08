@@ -1,5 +1,4 @@
 package se.sundsvall.users.api.model;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,7 +21,7 @@ public class UpdateUserRequest {
 	private String municipalityId;
 
 	@Schema(description = "Status", example = "ACTIVE")
-	@ValidEnum(enumClass = Status.class)
+	@ValidEnum(enumClass = Status.class, ignoreCase = true)
 	private String status;
 
 	public static UpdateUserRequest create() {
