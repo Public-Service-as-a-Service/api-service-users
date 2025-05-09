@@ -28,7 +28,7 @@ public class UserEntity implements Serializable {
 	@Column(nullable = false, name = "municipality_id")
 	private String municipalityId;
 
-	@Column(nullable = false, name = "status", columnDefinition = "ENUM('ACTIVE', 'INACTIVE') NOT NULL")
+	@Column(nullable = false, name = "status", columnDefinition = "ENUM('ACTIVE', 'INACTIVE', 'SUSPENDED) NOT NULL")
 	private String status;
 
 	public UserEntity() {}
