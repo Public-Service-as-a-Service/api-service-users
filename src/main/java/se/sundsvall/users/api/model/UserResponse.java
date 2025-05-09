@@ -1,7 +1,6 @@
 package se.sundsvall.users.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import se.sundsvall.users.integration.model.Enum.Status;
 
 import java.util.Objects;
 

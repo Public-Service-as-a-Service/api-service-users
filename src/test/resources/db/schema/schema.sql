@@ -3,5 +3,5 @@ CREATE TABLE users (
     email_address VARCHAR(50) NOT NULL PRIMARY KEY,
     phone_number_ VARCHAR(15),
 	municipality_id VARCHAR(50),
-    status ENUM('ACTIVE', 'SUSPENDED', 'INACTIVE')
+    status VARCHAR(10)
 );

@@ -1,14 +1,11 @@
 package se.sundsvall.users.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import se.sundsvall.dept44.common.validators.annotation.ValidMobileNumber;
 import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 import se.sundsvall.users.api.validation.ValidEnum;
-import se.sundsvall.users.integration.model.Enum.Status;
+import se.sundsvall.users.integration.db.model.Enum.Status;
 
 public class UpdateUserRequest {
 

@@ -1,8 +1,6 @@
 package se.sundsvall.users.integration.db.model;
 
 import org.junit.jupiter.api.Test;
-import se.sundsvall.users.integration.model.Enum.Status;
-import se.sundsvall.users.integration.model.UserEntity;
 
 import java.util.UUID;
 

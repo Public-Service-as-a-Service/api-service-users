@@ -6,9 +6,8 @@ import org.zalando.problem.Problem;
 import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
-import se.sundsvall.users.integration.UserRepository;
-import se.sundsvall.users.integration.model.Enum.Status;
-import se.sundsvall.users.integration.model.UserEntity;
+import se.sundsvall.users.integration.db.UserRepository;
+import se.sundsvall.users.integration.db.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
 
 import static java.lang.String.format;
@@ -23,6 +22,9 @@ public class UserService {
 
 	private final UserMapper userMapper;
 
+	private final String USER_NOT_FOUND = "user %s was not found";
+	private final String USER_ALREADY_EXISTING = "user %s already exist";
+
 	public UserService(UserRepository userRepository, UserMapper userMapper) {
 		this.userRepository = userRepository;
 		this.userMapper = userMapper;
@@ -35,7 +37,7 @@ public class UserService {
 
 			return userMapper.toUserResponse(userEntity);
 		}
-		throw Problem.valueOf(CONFLICT, format("user %s already exist", userRequest.getEmail()));
+		throw Problem.valueOf(CONFLICT, format(USER_ALREADY_EXISTING, userRequest.getEmail()));
 	}
 
 	// READ
@@ -45,7 +47,7 @@ public class UserService {
 
 			return userMapper.toUserResponse(userEntity);
 		}
-		throw Problem.valueOf(NOT_FOUND, format("user %s was not found", email));
+		throw Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email));
 	}
 
 	// UPDATE
@@ -60,7 +62,7 @@ public class UserService {
 
 			return userMapper.toUserResponse(userEntity);
 		}
-		throw Problem.valueOf(NOT_FOUND, format("user %s was not found", email));
+		throw Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email));
 	}
 
 	// DELETE
@@ -71,6 +73,6 @@ public class UserService {
 
 			return userMapper.toUserResponse(userEntity);
 		}
-		throw Problem.valueOf(NOT_FOUND, format("user %s was not found", email));
+		throw Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email));
 	}
 }

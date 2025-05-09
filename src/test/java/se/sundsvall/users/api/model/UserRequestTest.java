@@ -2,8 +2,7 @@ package se.sundsvall.users.api.model;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
-import se.sundsvall.users.integration.model.Enum.Status;
-import se.sundsvall.users.integration.model.UserEntity;
+import se.sundsvall.users.integration.db.model.UserEntity;
 
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanConstructor;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetters;

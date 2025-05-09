@@ -1,9 +1,7 @@
-package se.sundsvall.users.integration;
+package se.sundsvall.users.integration.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import se.sundsvall.users.integration.model.UserEntity;
-
-import java.util.Optional;
+import se.sundsvall.users.integration.db.model.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, String> {
 

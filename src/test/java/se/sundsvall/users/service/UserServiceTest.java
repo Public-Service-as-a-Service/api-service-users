@@ -9,8 +9,8 @@ import org.zalando.problem.Problem;
 import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
-import se.sundsvall.users.integration.UserRepository;
-import se.sundsvall.users.integration.model.UserEntity;
+import se.sundsvall.users.integration.db.UserRepository;
+import se.sundsvall.users.integration.db.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
 
 import java.util.Optional;

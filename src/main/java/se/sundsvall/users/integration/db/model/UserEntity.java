@@ -1,11 +1,7 @@
-package se.sundsvall.users.integration.model;
+package se.sundsvall.users.integration.db.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.UuidGenerator;
-import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
-import se.sundsvall.users.integration.model.Enum.Status;
 
 import java.io.Serializable;
 
@@ -21,20 +17,18 @@ public class UserEntity implements Serializable {
 	@UuidGenerator
 	@Column(nullable = false, name = "guid")
 	private String id;
+
 	@Id
 	@Column(nullable = false, name = "email_address")
-	@Email(message = "ej en giltig Email-adress")
 	private String email;
 
 	@Column(nullable = false, name = "phone_number")
-	@Pattern(regexp = "^\\+?[0-9 ()-]{7,20}$")
 	private String phoneNumber;
 
 	@Column(nullable = false, name = "municipality_id")
-	@ValidMunicipalityId
 	private String municipalityId;
 
-	@Column(nullable = false, name = "status", columnDefinition = "ENUM")
+	@Column(nullable = false, name = "status", columnDefinition = "ENUM('ACTIVE', 'INACTIVE') NOT NULL")
 	private String status;
 
 	public UserEntity() {}
