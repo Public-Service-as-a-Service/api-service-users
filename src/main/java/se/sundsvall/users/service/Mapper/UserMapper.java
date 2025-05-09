@@ -3,6 +3,7 @@ package se.sundsvall.users.service.Mapper;
 import org.springframework.stereotype.Component;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
+import se.sundsvall.users.integration.db.model.Enum.Status;
 import se.sundsvall.users.integration.db.model.UserEntity;
 
 import java.util.Optional;
@@ -16,7 +17,7 @@ public class UserMapper {
 				.withEmail(entity.getEmail())
 				.withPhoneNumber(entity.getPhoneNumber())
 				.withMunicipalityId(entity.getMunicipalityId())
-				.withStatus(entity.getStatus()))
+				.withStatus(String.valueOf(entity.getStatus())))
 			.orElse(null);
 	}
 
@@ -26,7 +27,7 @@ public class UserMapper {
 				.withEmail(request.getEmail())
 				.withPhoneNumber(request.getPhoneNumber())
 				.withMunicipalityId(request.getMunicipalityId())
-				.withStatus(request.getStatus()))
+				.withStatus(Status.valueOf(request.getStatus().toUpperCase())))
 			.orElse(null);
 	}
 }

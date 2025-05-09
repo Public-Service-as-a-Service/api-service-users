@@ -7,6 +7,7 @@ import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.db.UserRepository;
+import se.sundsvall.users.integration.db.model.Enum.Status;
 import se.sundsvall.users.integration.db.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
 
@@ -57,7 +58,7 @@ public class UserService {
 
 			userEntity.setPhoneNumber(userRequest.getPhoneNumber());
 			userEntity.setMunicipalityId(userRequest.getMunicipalityId());
-			userEntity.setStatus(userRequest.getStatus());
+			userEntity.setStatus(Status.valueOf(userRequest.getStatus().toUpperCase()));
 			userRepository.save(userEntity);
 
 			return userMapper.toUserResponse(userEntity);

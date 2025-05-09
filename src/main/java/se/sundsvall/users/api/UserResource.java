@@ -41,7 +41,7 @@ public class UserResource {
 	public ResponseEntity<UserResponse> saveUser(@RequestBody @Valid UserRequest userRequest) {
 		final var user = userService.createUser(userRequest);
 		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/user/").buildAndExpand(userRequest).toUri())
-				.body(user);
+			.body(user);
 	}
 
 	@GetMapping("users/{email}")
@@ -57,7 +57,7 @@ public class UserResource {
 	public ResponseEntity<UserResponse> updateUser(@Valid @Email @PathVariable String email, @RequestBody @Valid UpdateUserRequest userRequest) {
 		var user = userService.updateUser(userRequest, email);
 		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/user/").buildAndExpand(userRequest).toUri())
-				.body(user);
+			.body(user);
 	}
 
 	@DeleteMapping("users/{email}")

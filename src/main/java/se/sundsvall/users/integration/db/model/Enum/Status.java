@@ -9,4 +9,8 @@ public enum Status {
 	INACTIVE,
 	SUSPENDED;
 
+	@JsonCreator
+	public static Status fromString(String value) {
+		return value == null ? null : Status.valueOf(value.toUpperCase());
+	}
 }

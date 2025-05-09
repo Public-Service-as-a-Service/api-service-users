@@ -50,13 +50,13 @@ public class UserResourceTest {
 			.contentType(MediaType.APPLICATION_JSON)
 			.bodyValue(userRequest)
 			.exchange()
-			.expectStatus().isOk()
+			.expectStatus().isCreated()
 			.expectBody(UserResponse.class)
 			.returnResult()
 			.getResponseBody();
 
 		// Assert
-		assertThat(response).isEqualTo(null); // ska resultatet returnera eller fungerar det med void?
+		assertThat(response).isEqualTo(userResponse); // ska resultatet returnera eller fungerar det med void?
 		verify(userServiceMock).createUser(userRequest);
 
 	}
@@ -103,7 +103,7 @@ public class UserResourceTest {
 			.uri("/api/users/{email}", email)
 			.bodyValue(userRequest)
 			.exchange()
-			.expectStatus().isOk()
+			.expectStatus().isCreated()
 			.expectBody(UserResponse.class)
 			.returnResult()
 			.getResponseBody();
@@ -121,7 +121,7 @@ public class UserResourceTest {
 		final var response = webTestClient.delete()
 			.uri("/api/users/{email}", email)
 			.exchange()
-			.expectStatus().isOk()
+			.expectStatus().isNoContent()
 			.expectBody(UserResponse.class)
 			.returnResult()
 			.getResponseBody();

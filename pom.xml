@@ -37,7 +37,6 @@
 			<artifactId>flyway-mysql</artifactId>
 		</dependency>
 
-
 		<!-- Testcontainers for MariaDB -->
 		<dependency>
 			<groupId>org.testcontainers</groupId>
@@ -66,7 +65,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-
 
 </project>

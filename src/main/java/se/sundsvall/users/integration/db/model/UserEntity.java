@@ -2,6 +2,7 @@ package se.sundsvall.users.integration.db.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.UuidGenerator;
+import se.sundsvall.users.integration.db.model.Enum.Status;
 
 import java.io.Serializable;
 
@@ -29,11 +30,12 @@ public class UserEntity implements Serializable {
 	private String municipalityId;
 
 	@Column(nullable = false, name = "status", columnDefinition = "ENUM('ACTIVE', 'INACTIVE', 'SUSPENDED') NOT NULL")
-	private String status;
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
 	public UserEntity() {}
 
-	public UserEntity(String id, String email, String phoneNumber, String municipalityId, String status) {
+	public UserEntity(String id, String email, String phoneNumber, String municipalityId, Status status) {
 		this.id = id;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
@@ -67,7 +69,7 @@ public class UserEntity implements Serializable {
 	}
 
 	public UserEntity withEmail(String email) {
-		setEmail(email);
+		this.email = email;
 		return this;
 	}
 
@@ -80,7 +82,7 @@ public class UserEntity implements Serializable {
 	}
 
 	public UserEntity withPhoneNumber(String phoneNumber) {
-		setPhoneNumber(phoneNumber);
+		this.phoneNumber = phoneNumber;
 		return this;
 	}
 
@@ -93,20 +95,20 @@ public class UserEntity implements Serializable {
 	}
 
 	public UserEntity withMunicipalityId(String municipalityId) {
-		setMunicipalityId(municipalityId);
+		this.municipalityId = municipalityId;
 		return this;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 
-	public UserEntity withStatus(String status) {
-		setStatus(status);
+	public UserEntity withStatus(Status status) {
+		this.status = status;
 		return this;
 	}
 }
