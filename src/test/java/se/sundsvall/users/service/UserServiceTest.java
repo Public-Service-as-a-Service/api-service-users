@@ -10,6 +10,7 @@ import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.db.UserRepository;
+import se.sundsvall.users.integration.db.model.Enum.Status;
 import se.sundsvall.users.integration.db.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
 
@@ -61,7 +62,7 @@ public class UserServiceTest {
 		final var email = "TestMail123@mail.se";
 		final var phoneNumber = "99070121212";
 		final var municipalityId = "2281";
-		final var status = "Active";
+		final var status = "ACTIVE";
 		final var userRequestMock = UserRequest.create().withEmail(email)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
@@ -69,7 +70,7 @@ public class UserServiceTest {
 		final var userEntity = UserEntity.create().withEmail(email)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
-			.withStatus(status);
+			.withStatus(Status.valueOf(status));
 		final var userResponseMock = UserResponse.create().withEmail(email)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
@@ -97,7 +98,7 @@ public class UserServiceTest {
 		final var email = "TestMail123@mail.se";
 		final var phoneNumber = "0701235223";
 		final var municipalityId = "2281";
-		final var status = "Active";
+		final var status = "ACTIVE";
 		final var userRequestMock = UpdateUserRequest.create()
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
@@ -105,7 +106,7 @@ public class UserServiceTest {
 		final var userEntity = UserEntity.create().withEmail(email)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
-			.withStatus(status);
+			.withStatus(Status.valueOf(status));
 		final var userResponseMock = UserResponse.create().withEmail(email)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)

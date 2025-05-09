@@ -1,6 +1,7 @@
 package se.sundsvall.users.integration.db.model;
 
 import org.junit.jupiter.api.Test;
+import se.sundsvall.users.integration.db.model.Enum.Status;
 
 import java.util.UUID;
 
@@ -25,7 +26,7 @@ public class UserEntityTest {
 		final var email = "email";
 		final var phoneNumber = "phoneNumber";
 		final var municipalityId = "municipalityId";
-		final var status = "status";
+		final var status = Status.valueOf("ACTIVE");
 
 		final var userEntity = UserEntity.create()
 			.withId(guid)

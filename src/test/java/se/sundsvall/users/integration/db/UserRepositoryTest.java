@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import se.sundsvall.users.integration.db.model.Enum.Status;
 import se.sundsvall.users.integration.db.model.UserEntity;
 
 import java.util.UUID;
@@ -28,15 +29,15 @@ public class UserRepositoryTest {
 	private static final String PHONE_NUMBER_2 = "0021234567";
 	private static final String MUNICIPALITY_ID_1 = "2281";
 	private static final String MUNICIPALITY_ID_2 = "0689";
-	private static final String STATUS_1 = "ACTIVE";
-	private static final String STATUS_2 = "SUSPENDED";
+	private static final Status STATUS_1 = Status.valueOf("ACTIVE");
+	private static final Status STATUS_2 = Status.valueOf("SUSPENDED");
 
 	@Autowired
 	private UserRepository userRepository;
 
 	@Test
 	void createUser() {
-		final var userEntity = UserEntity.create().withId(UUID.randomUUID().toString()).withEmail("TestMail123@hotmail.com").withPhoneNumber("0031234567").withMunicipalityId("2281").withStatus("INACTIVE");
+		final var userEntity = UserEntity.create().withId(UUID.randomUUID().toString()).withEmail("TestMail123@hotmail.com").withPhoneNumber("0031234567").withMunicipalityId("2281").withStatus(Status.valueOf("INACTIVE"));
 
 		final var savedEntity = userRepository.save(userEntity);
 		final var parsedEntity = userRepository.findById(savedEntity.getEmail());
@@ -45,7 +46,7 @@ public class UserRepositoryTest {
 		assertThat(savedEntity.getEmail()).isEqualTo("TestMail123@hotmail.com");
 		assertThat(savedEntity.getPhoneNumber()).isEqualTo("0031234567");
 		assertThat(savedEntity.getMunicipalityId()).isEqualTo("2281");
-		assertThat(savedEntity.getStatus()).isEqualTo("INACTIVE");
+		assertThat(savedEntity.getStatus()).isEqualTo(Status.valueOf("INACTIVE"));
 		assertThat(parsedEntity).isPresent();
 	}
 

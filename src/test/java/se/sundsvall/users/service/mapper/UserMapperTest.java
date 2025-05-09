@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.sundsvall.users.api.model.UserRequest;
+import se.sundsvall.users.integration.db.model.Enum.Status;
 import se.sundsvall.users.integration.db.model.UserEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,12 +22,12 @@ public class UserMapperTest {
 		final var email = "TestMail123@mail.se";
 		final var phoneNumber = "99070121212";
 		final var municipalityId = "2281";
-		final var status = "Active";
+		final var status = "ACTIVE";
 
 		final var userEntity = UserEntity.create().withEmail(email)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
-			.withStatus(status);
+			.withStatus(Status.valueOf(status));
 
 		// Act
 		final var result = userMapper.toUserResponse(userEntity);
@@ -45,7 +46,7 @@ public class UserMapperTest {
 		final var email = "TestMail123@mail.se";
 		final var phoneNumber = "99070121212";
 		final var municipalityId = "2281";
-		final var status = "Active";
+		final var status = "ACTIVE";
 
 		final var userRequest = UserRequest.create().withEmail(email)
 			.withPhoneNumber(phoneNumber)
@@ -58,7 +59,7 @@ public class UserMapperTest {
 		assertThat(result.getEmail()).isEqualTo(email);
 		assertThat(result.getPhoneNumber()).isEqualTo(phoneNumber);
 		assertThat(result.getMunicipalityId()).isEqualTo(municipalityId);
-		assertThat(result.getStatus()).isEqualTo(status);
+		assertThat(result.getStatus()).isEqualTo(Status.valueOf(status));
 	}
 
 //    @Test
