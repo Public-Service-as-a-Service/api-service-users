@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.zalando.problem.Problem;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 import se.sundsvall.users.api.model.UpdateUserRequest;
@@ -36,8 +37,11 @@ public class UserResource {
 
 	// Se om det ska vara en void metod eller om vi ska retunera ett respone
 	@PostMapping("users")
-	public void saveUser(@RequestBody @Valid UserRequest userRequest) {
-		userService.createUser(userRequest);
+	@ApiResponse(responseCode = "201", description = "Successful operation", useReturnTypeSchema = true)
+	public ResponseEntity<UserResponse> saveUser(@RequestBody @Valid UserRequest userRequest) {
+		final var user = userService.createUser(userRequest);
+		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/user/").buildAndExpand(userRequest).toUri())
+				.body(user);
 	}
 
 	@GetMapping("users/{email}")
@@ -48,14 +52,18 @@ public class UserResource {
 	}
 
 	@PutMapping("users/{email}")
+	@ApiResponse(responseCode = "201", description = "Successful operation", useReturnTypeSchema = true)
 	@Validated
 	public ResponseEntity<UserResponse> updateUser(@Valid @Email @PathVariable String email, @RequestBody @Valid UpdateUserRequest userRequest) {
 		var user = userService.updateUser(userRequest, email);
-		return user != null ? ok(user) : ResponseEntity.noContent().build();
+		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/user/").buildAndExpand(userRequest).toUri())
+				.body(user);
 	}
 
 	@DeleteMapping("users/{email}")
-	public void deleteByEmail(@Valid @Email @PathVariable String email) {
+	@ApiResponse(responseCode = "204", description = "Successful operation", useReturnTypeSchema = true)
+	public ResponseEntity<Void> deleteByEmail(@Valid @Email @PathVariable String email) {
 		userService.deleteUser(email);
+		return ResponseEntity.noContent().build();
 	}
 }
