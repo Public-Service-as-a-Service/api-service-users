@@ -1,6 +1,6 @@
-# TemplateSpringBoot
+# Users
 
-_A concise description of what this Spring Boot microservice does._
+_Manage users._
 
 ## Getting Started
 
@@ -17,8 +17,8 @@ _A concise description of what this Spring Boot microservice does._
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/Sundsvallskommun/YOUR-PROJECT-ID.git
-   cd YOUR-PROJECT-ID
+   git clone https://github.com/Public-Service-as-a-Service/api-service-users.git
+   cd api-service-users
    ```
 2. **Configure the application:**
 
@@ -72,7 +72,7 @@ Refer to the [API Documentation](#api-documentation) for detailed information on
 ### Example Request
 
 ```bash
-curl -X GET http://localhost:8080/api/resource
+curl -X GET curl -X POST "http://localhost:8080/api/users" -H "Content-Type: application/json" -d "{\"email\": \"1\"}"
 ```
 
 ## Configuration
@@ -152,4 +152,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-© 2024 Sundsvalls kommun
+Copyright © 2024 Public Service as a Service
