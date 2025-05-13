@@ -1,7 +1,7 @@
 CREATE TABLE users (
-    guid VARCHAR(100) NOT NULL DEFAULT (UUID()),
-    email_address VARCHAR(50) NOT NULL PRIMARY KEY,
+    id VARCHAR(100) NOT NULL PRIMARY KEY DEFAULT (UUID()),
+    email_address VARCHAR(50) NOT NULL  UNIQUE,
     phone_number_ VARCHAR(15),
 	municipality_id VARCHAR(50),
-    status VARCHAR(10)
+    status VARCHAR(15)
 );

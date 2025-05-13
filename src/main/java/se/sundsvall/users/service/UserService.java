@@ -33,7 +33,7 @@ public class UserService {
 
 	// CREATE
 	public UserResponse createUser(UserRequest userRequest) {
-		if (userRepository.findById(userRequest.getEmail()).isEmpty()) {
+		if (userRepository.findByEmail(userRequest.getEmail()).isEmpty()) {
 			final var userEntity = userRepository.save(userMapper.toUserEntity(userRequest));
 
 			return userMapper.toUserResponse(userEntity);
@@ -43,37 +43,26 @@ public class UserService {
 
 	// READ
 	public UserResponse getUserByEmail(String email) {
-		if (userRepository.findById(email).isPresent()) {
-			UserEntity userEntity = userRepository.getReferenceById(email);
-
-			return userMapper.toUserResponse(userEntity);
-		}
-		throw Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email));
+		return userRepository.findByEmail(email).map(userMapper::toUserResponse)
+			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email)));
 	}
 
 	// UPDATE
 	public UserResponse updateUser(UpdateUserRequest userRequest, String email) {
-		if (userRepository.findById(email).isPresent()) {
-			var userEntity = userRepository.getReferenceById(email);
 
-			userEntity.setPhoneNumber(userRequest.getPhoneNumber());
-			userEntity.setMunicipalityId(userRequest.getMunicipalityId());
-			userEntity.setStatus(Status.valueOf(userRequest.getStatus().toUpperCase()));
-			userRepository.save(userEntity);
+		var userEntity = userRepository.findByEmail(email)
+				.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email)));
 
-			return userMapper.toUserResponse(userEntity);
-		}
-		throw Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email));
+		userEntity.setPhoneNumber(userRequest.getPhoneNumber());
+		userEntity.setMunicipalityId(userRequest.getMunicipalityId());
+		userEntity.setStatus(Status.valueOf(userRequest.getStatus().toUpperCase()));
+		userRepository.save(userEntity);
+
+		return userMapper.toUserResponse(userEntity);
 	}
 
 	// DELETE
-	public UserResponse deleteUser(String email) {
-		if (userRepository.findById(email).isPresent()) {
-			var userEntity = userRepository.getReferenceById(email);
-			userRepository.deleteById(email);
-
-			return userMapper.toUserResponse(userEntity);
-		}
-		throw Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email));
+	public void deleteUser(String email) {
+		userRepository.deleteById(email);
 	}
 }

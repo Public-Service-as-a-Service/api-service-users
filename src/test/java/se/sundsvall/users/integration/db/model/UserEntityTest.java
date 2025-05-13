@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
 
-public class UserEntityTest {
+class UserEntityTest {
 
 	@Test
 	void testBean() {

@@ -14,13 +14,12 @@ import java.io.Serializable;
 public class UserEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	@Id
 	@UuidGenerator
-	@Column(nullable = false, name = "guid")
+	@Column(nullable = false, name = "id")
 	private String id;
 
-	@Id
-	@Column(nullable = false, name = "email_address")
+	@Column(nullable = false, name = "email_address", unique = true)
 	private String email;
 
 	@Column(nullable = false, name = "phone_number")
@@ -29,19 +28,9 @@ public class UserEntity implements Serializable {
 	@Column(nullable = false, name = "municipality_id")
 	private String municipalityId;
 
-	@Column(nullable = false, name = "status", columnDefinition = "ENUM('ACTIVE', 'INACTIVE', 'SUSPENDED') NOT NULL")
+	@Column(nullable = false, name = "status")
 	@Enumerated(EnumType.STRING)
 	private Status status;
-
-	public UserEntity() {}
-
-	public UserEntity(String id, String email, String phoneNumber, String municipalityId, Status status) {
-		this.id = id;
-		this.email = email;
-		this.phoneNumber = phoneNumber;
-		this.municipalityId = municipalityId;
-		this.status = status;
-	}
 
 	public static UserEntity create() {
 		return new UserEntity();

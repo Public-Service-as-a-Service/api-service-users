@@ -15,13 +15,12 @@ import se.sundsvall.users.service.UserService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("junit")
 
-public class UserResourceTest {
+class UserResourceTest {
 
 	@MockBean
 	private UserService userServiceMock;
@@ -58,6 +57,7 @@ public class UserResourceTest {
 		// Assert
 		assertThat(response).isEqualTo(userResponse); // ska resultatet returnera eller fungerar det med void?
 		verify(userServiceMock).createUser(userRequest);
+		verifyNoMoreInteractions(userServiceMock);
 
 	}
 
@@ -117,7 +117,7 @@ public class UserResourceTest {
 	void deleteUser() {
 		final var email = "test@test.com";
 
-		when(userServiceMock.deleteUser(email)).thenReturn(null);
+		doNothing().when(userServiceMock).deleteUser(email);
 		final var response = webTestClient.delete()
 			.uri("/api/users/{email}", email)
 			.exchange()

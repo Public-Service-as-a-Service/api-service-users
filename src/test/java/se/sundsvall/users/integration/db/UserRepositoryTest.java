@@ -21,7 +21,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 	"/db/script/truncate.sql",
 	"/db/script/UserRepositoryTest.sql"
 })
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
 	private static final String MAIL_ADRESS_1 = "testmail1@sundsvall.se";
 	private static final String MAIL_ADRESS_2 = "testmail2@sundsvall.se";
@@ -29,24 +29,25 @@ public class UserRepositoryTest {
 	private static final String PHONE_NUMBER_2 = "0021234567";
 	private static final String MUNICIPALITY_ID_1 = "2281";
 	private static final String MUNICIPALITY_ID_2 = "0689";
-	private static final Status STATUS_1 = Status.valueOf("ACTIVE");
-	private static final Status STATUS_2 = Status.valueOf("SUSPENDED");
+	private static final Status STATUS_1 = Status.ACTIVE;
+	private static final Status STATUS_2 = Status.SUSPENDED;
 
 	@Autowired
 	private UserRepository userRepository;
 
 	@Test
 	void createUser() {
-		final var userEntity = UserEntity.create().withId(UUID.randomUUID().toString()).withEmail("TestMail123@hotmail.com").withPhoneNumber("0031234567").withMunicipalityId("2281").withStatus(Status.valueOf("INACTIVE"));
-
+		final var userEntity = UserEntity.create().withId(UUID.randomUUID().toString()).withEmail("TestMail123@hotmail.com").withPhoneNumber("0031234567").withMunicipalityId("2281").withStatus(Status.INACTIVE);
+		final var uuid = userEntity.getId();
 		final var savedEntity = userRepository.save(userEntity);
 		final var parsedEntity = userRepository.findById(savedEntity.getEmail());
 
+		assertThat(savedEntity.getId()).isEqualTo(uuid);
 		assertThat(savedEntity.getId()).isNotNull();
 		assertThat(savedEntity.getEmail()).isEqualTo("TestMail123@hotmail.com");
 		assertThat(savedEntity.getPhoneNumber()).isEqualTo("0031234567");
 		assertThat(savedEntity.getMunicipalityId()).isEqualTo("2281");
-		assertThat(savedEntity.getStatus()).isEqualTo(Status.valueOf("INACTIVE"));
+		assertThat(savedEntity.getStatus()).isEqualTo(Status.INACTIVE);
 		assertThat(parsedEntity).isPresent();
 	}
 

@@ -1,15 +1,11 @@
 CREATE
     TABLE
         users(
-            guid VARCHAR(100) NOT NULL DEFAULT(
+            id VARCHAR(100) NOT NULL PRIMARY KEY DEFAULT(
                 UUID()
             ),
-            email_address VARCHAR(50) NOT NULL PRIMARY KEY,
+            email_address VARCHAR(50) NOT NULL UNIQUE,
             phone_number_ VARCHAR(15),
             municipality_id VARCHAR(50),
-            status ENUM(
-                'ACTIVE',
-                'SUSPENDED',
-                'INACTIVE'
-            )
+            status VARCHAR(15)
         );

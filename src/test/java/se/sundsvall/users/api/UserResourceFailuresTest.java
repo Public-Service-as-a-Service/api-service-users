@@ -19,7 +19,7 @@ import static org.zalando.problem.Status.BAD_REQUEST;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("junit")
-public class UserResourceFailuresTest {
+class UserResourceFailuresTest {
 
 	@Autowired
 	private WebTestClient webTestClient;

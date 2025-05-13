@@ -11,7 +11,7 @@ import se.sundsvall.users.integration.db.model.UserEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class UserMapperTest {
+class UserMapperTest {
 
 	@InjectMocks
 	UserMapper userMapper;
