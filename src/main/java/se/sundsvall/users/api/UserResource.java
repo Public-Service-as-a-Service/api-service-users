@@ -35,7 +35,7 @@ public class UserResource {
 		this.userService = userService;
 	}
 
-	// Se om det ska vara en void metod eller om vi ska retunera ett respone
+	// Se om det ska vara en void metod eller om vi ska returnera ett response
 	@PostMapping("users")
 	@ApiResponse(responseCode = "201", description = "Successful operation", useReturnTypeSchema = true)
 	public ResponseEntity<UserResponse> saveUser(@RequestBody @Valid UserRequest userRequest) {
