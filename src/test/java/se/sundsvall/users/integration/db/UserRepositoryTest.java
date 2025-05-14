@@ -56,7 +56,7 @@ class UserRepositoryTest {
 
 	@Test
 	void updateUser() {
-		final var userEntity = UserEntity.create().withId(UUID.randomUUID().toString()).withEmail(MAIL_ADRESS_1).withPhoneNumber(PHONE_NUMBER_1).withMunicipalityId(MUNICIPALITY_ID_1).withStatus(STATUS_1);
+		final var userEntity = UserEntity.create().withEmail(MAIL_ADRESS_1).withPhoneNumber(PHONE_NUMBER_1).withMunicipalityId(MUNICIPALITY_ID_1).withStatus(STATUS_1);
 
 		final var savedEntity = userRepository.save(userEntity);
 		assertThat(savedEntity.getEmail()).isEqualTo(MAIL_ADRESS_1);
@@ -72,6 +72,7 @@ class UserRepositoryTest {
 		savedEntity.setStatus(STATUS_2);
 
 		final var updatedEntity = userRepository.save(savedEntity);
+		assertThat(updatedEntity.getId()).isEqualTo(savedEntity.getId());
 		assertThat(updatedEntity.getEmail()).isEqualTo(MAIL_ADRESS_1);
 		assertThat(updatedEntity.getPhoneNumber()).isEqualTo(PHONE_NUMBER_2);
 		assertThat(updatedEntity.getMunicipalityId()).isEqualTo(MUNICIPALITY_ID_2);
