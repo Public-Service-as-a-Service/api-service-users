@@ -28,7 +28,6 @@ class UserResourceTest {
 	@Autowired
 	private WebTestClient webTestClient;
 
-	// Se om det ska vara en void metod eller om vi ska retunera ett respone
 	@Test
 	void saveUser() {
 
@@ -55,15 +54,14 @@ class UserResourceTest {
 			.getResponseBody();
 
 		// Assert
-		assertThat(response).isEqualTo(userResponse); // ska resultatet returnera eller fungerar det med void?
+		assertThat(response).isEqualTo(userResponse);
 		verify(userServiceMock).createUser(userRequest);
 		verifyNoMoreInteractions(userServiceMock);
 
-//		verifyNoMoreInteractions(userServiceMock);
 	}
 
 	@Test
-	void getUserByEmail() { // Detta funkar RÖR EJ!!!
+	void getUserByEmail() {
 		final var email = "kalle.kula@sundsvall.se";
 		final var userResponse = UserResponse.create()
 			.withEmail(email)
