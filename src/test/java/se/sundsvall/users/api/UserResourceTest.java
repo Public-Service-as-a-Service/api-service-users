@@ -110,7 +110,7 @@ class UserResourceTest {
 			.getResponseBody();
 
 		assertThat(response).isEqualTo(userResponse);
-		verify(userServiceMock).updateUser(refEq(userRequest), eq(email));
+		verify(userServiceMock).updateUser(userRequest, email);
 
 	}
 

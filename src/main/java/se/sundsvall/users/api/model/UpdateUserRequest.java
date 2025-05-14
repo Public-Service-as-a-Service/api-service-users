@@ -7,6 +7,8 @@ import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
 import se.sundsvall.users.api.validation.ValidEnum;
 import se.sundsvall.users.integration.db.model.Enum.Status;
 
+import java.util.Objects;
+
 public class UpdateUserRequest {
 
 	@Schema(description = "Telefonnummer", example = "0701234567")
@@ -64,5 +66,23 @@ public class UpdateUserRequest {
 	public UpdateUserRequest withStatus(String status) {
 		this.status = status;
 		return this;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(municipalityId, phoneNumber, status);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		UpdateUserRequest that = (UpdateUserRequest) o;
+		return Objects.equals(phoneNumber, that.phoneNumber)
+			&& Objects.equals(status, that.status) && Objects.equals(municipalityId, that.municipalityId);
 	}
 }
