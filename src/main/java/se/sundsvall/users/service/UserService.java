@@ -63,6 +63,6 @@ public class UserService {
 
 	// DELETE
 	public void deleteUser(String email) {
-		userRepository.deleteById(email);
+		userRepository.deleteByEmail(email);
 	}
 }

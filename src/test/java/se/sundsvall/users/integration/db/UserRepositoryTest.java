@@ -83,7 +83,7 @@ class UserRepositoryTest {
 
 	@Test
 	void getUserByMail() {
-		final var testUser = userRepository.findById(MAIL_ADRESS_1);
+		final var testUser = userRepository.findByEmail(MAIL_ADRESS_1);
 
 		assertThat(testUser).isPresent().hasValueSatisfying(user -> {
 			assertThat(user.getEmail()).isEqualTo(MAIL_ADRESS_1);
@@ -95,8 +95,8 @@ class UserRepositoryTest {
 
 	@Test
 	void deleteUser() {
-		assertThat(userRepository.findById(MAIL_ADRESS_2)).isPresent();
-		userRepository.deleteById(MAIL_ADRESS_2);
-		assertThat(userRepository.findById(MAIL_ADRESS_2)).isNotPresent();
+		assertThat(userRepository.findByEmail(MAIL_ADRESS_2)).isPresent();
+		userRepository.deleteByEmail(MAIL_ADRESS_2);
+		assertThat(userRepository.findByEmail(MAIL_ADRESS_2)).isNotPresent();
 	}
 }

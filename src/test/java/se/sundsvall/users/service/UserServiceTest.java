@@ -134,7 +134,7 @@ class UserServiceTest {
 		userService.deleteUser(email);
 
 		// Verify/Assert
-		verify(userRepositoryMock).deleteById(email);
+		verify(userRepositoryMock).deleteByEmail(email);
 
 	}
 
@@ -194,6 +194,5 @@ class UserServiceTest {
 		assertThat(problem).hasMessage("Not Found: user " + email + " was not found");
 		assertThat(problem).isNotNull();
 	}
-
 
 }
