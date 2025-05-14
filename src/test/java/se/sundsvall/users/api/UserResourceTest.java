@@ -59,6 +59,7 @@ class UserResourceTest {
 		verify(userServiceMock).createUser(userRequest);
 		verifyNoMoreInteractions(userServiceMock);
 
+//		verifyNoMoreInteractions(userServiceMock);
 	}
 
 	@Test

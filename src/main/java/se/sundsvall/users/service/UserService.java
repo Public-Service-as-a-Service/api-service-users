@@ -51,7 +51,7 @@ public class UserService {
 	public UserResponse updateUser(UpdateUserRequest userRequest, String email) {
 
 		var userEntity = userRepository.findByEmail(email)
-				.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email)));
+			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email)));
 
 		userEntity.setPhoneNumber(userRequest.getPhoneNumber());
 		userEntity.setMunicipalityId(userRequest.getMunicipalityId());

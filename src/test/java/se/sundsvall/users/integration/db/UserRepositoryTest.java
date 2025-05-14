@@ -37,12 +37,15 @@ class UserRepositoryTest {
 
 	@Test
 	void createUser() {
-		final var userEntity = UserEntity.create().withId(UUID.randomUUID().toString()).withEmail("TestMail123@hotmail.com").withPhoneNumber("0031234567").withMunicipalityId("2281").withStatus(Status.INACTIVE);
-		final var uuid = userEntity.getId();
-		final var savedEntity = userRepository.save(userEntity);
-		final var parsedEntity = userRepository.findById(savedEntity.getEmail());
+		final var userEntity = UserEntity.create()
+			.withEmail("TestMail123@hotmail.com")
+			.withPhoneNumber("0031234567")
+			.withMunicipalityId("2281")
+			.withStatus(Status.INACTIVE);
 
-		assertThat(savedEntity.getId()).isEqualTo(uuid);
+		final var savedEntity = userRepository.save(userEntity);
+		final var parsedEntity = userRepository.findByEmail(savedEntity.getEmail());
+
 		assertThat(savedEntity.getId()).isNotNull();
 		assertThat(savedEntity.getEmail()).isEqualTo("TestMail123@hotmail.com");
 		assertThat(savedEntity.getPhoneNumber()).isEqualTo("0031234567");

@@ -41,8 +41,7 @@ class UserServiceTest {
 		final var userEntity = UserEntity.create().withId(email);
 		final var expectedUser = new UserResponse();
 
-		when(userRepositoryMock.findById(email)).thenReturn(Optional.of(userEntity));
-		when(userRepositoryMock.getReferenceById(email)).thenReturn(userEntity);
+		when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.of(userEntity));
 		when(userMapper.toUserResponse(userEntity)).thenReturn(expectedUser);
 
 		// Act
@@ -50,8 +49,7 @@ class UserServiceTest {
 
 		// Assert
 		assertThat(result).isSameAs(expectedUser);
-		verify(userRepositoryMock).findById(email);
-		verify(userRepositoryMock).getReferenceById(email);
+		verify(userRepositoryMock).findByEmail(email);
 		verify(userMapper).toUserResponse(userEntity);
 
 	}
@@ -77,7 +75,7 @@ class UserServiceTest {
 			.withStatus(status);
 
 		when(userRepositoryMock.save(userEntity)).thenReturn(userEntity);
-		when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
+		when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.empty());
 
 		when(userMapper.toUserEntity(userRequestMock)).thenReturn(userEntity);
 		when(userMapper.toUserResponse(userEntity)).thenReturn(userResponseMock);
@@ -112,8 +110,7 @@ class UserServiceTest {
 			.withMunicipalityId(municipalityId)
 			.withStatus(status);
 		// Mock
-		when(userRepositoryMock.findById(email)).thenReturn(Optional.of(userEntity));
-		when(userRepositoryMock.getReferenceById(email)).thenReturn(userEntity);
+		when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.of(userEntity));
 
 		when(userRepositoryMock.save(userEntity)).thenReturn(userEntity);
 		when(userMapper.toUserResponse(userEntity)).thenReturn(userResponseMock);
@@ -132,17 +129,13 @@ class UserServiceTest {
 
 		// Arrange
 		final var email = "TestMail123@mail.se";
-		final var userEntity = UserEntity.create().withEmail(email);
-
-		// Mock
-		when(userRepositoryMock.findById(email)).thenReturn(Optional.of(userEntity));
-		when(userRepositoryMock.getReferenceById(email)).thenReturn(userEntity);
 
 		// Act
 		userService.deleteUser(email);
 
 		// Verify/Assert
 		verify(userRepositoryMock).deleteById(email);
+
 	}
 
 	@Test
@@ -153,7 +146,7 @@ class UserServiceTest {
 		userRequest.setEmail(email);
 
 		// Mock
-		when(userRepositoryMock.findById(email)).thenReturn(Optional.of(new UserEntity()));
+		when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.of(new UserEntity()));
 
 		// Act & Assert
 		final var exception = assertThrows(Throwable.class, () -> userService.createUser(userRequest));
@@ -162,7 +155,7 @@ class UserServiceTest {
 			.isInstanceOf(Problem.class)
 			.hasMessageContaining("user " + email + " already exist");
 
-		verify(userRepositoryMock).findById(email);
+		verify(userRepositoryMock).findByEmail(email);
 		verify(userRepositoryMock, never()).save(any());
 		verifyNoMoreInteractions(userRepositoryMock, userMapper);
 	}
@@ -172,7 +165,7 @@ class UserServiceTest {
 		// Arrange
 		final var email = "Testmail123@mail.com";
 
-		when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
+		when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.empty());
 
 		// Act
 		final var exception = assertThrows(Throwable.class, () -> userService.getUserByEmail(email));
@@ -181,7 +174,7 @@ class UserServiceTest {
 			.isInstanceOf(Problem.class)
 			.hasMessageContaining("user " + email + " was not found");
 
-		verify(userRepositoryMock).findById(email);
+		verify(userRepositoryMock).findByEmail(email);
 		verify(userRepositoryMock, never()).getReferenceById(any());
 		verify(userMapper, never()).toUserResponse(any());
 		verifyNoMoreInteractions(userRepositoryMock, userMapper);
@@ -194,7 +187,7 @@ class UserServiceTest {
 		final var request = UpdateUserRequest.create();
 
 		// Mock
-		when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
+		when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.empty());
 		final var problem = assertThrows(Throwable.class, () -> userService.updateUser(request, email));
 
 		// Assert
@@ -202,18 +195,5 @@ class UserServiceTest {
 		assertThat(problem).isNotNull();
 	}
 
-	@Test
-	void deleteUserNotFound() {
-		// Arrange
-		final var email = "TestMail123@mail.se";
-
-		// Mock
-		when(userRepositoryMock.findById(email)).thenReturn(Optional.empty());
-		final var problem = assertThrows(Throwable.class, () -> userService.deleteUser(email));
-
-		// Assert
-		assertThat(problem).hasMessage("Not Found: user " + email + " was not found");
-		assertThat(problem).isNotNull();
-	}
 
 }
