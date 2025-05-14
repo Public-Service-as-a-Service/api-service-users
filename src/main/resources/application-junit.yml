@@ -1,6 +1,10 @@
 #========================================
 # Test profile settings (junit tests)
 #========================================
+Spring:
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:mariadb:10.6.4:///junit-db
 logging:
   level:
     root: DEBUG
