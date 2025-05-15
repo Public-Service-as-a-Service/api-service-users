@@ -19,7 +19,7 @@ spring:
         persistence:
           schema-generation:
             database:
-              action: none
+              action: validate
   flyway:
     enabled: true
     baseline-on-migrate: true

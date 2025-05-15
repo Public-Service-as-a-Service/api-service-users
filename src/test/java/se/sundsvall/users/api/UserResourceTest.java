@@ -32,14 +32,14 @@ class UserResourceTest {
 	void saveUser() {
 
 		final var userRequest = UserRequest.create()
-			.withEmail("test@test.com")
+			.withEmail("test@testmail.com")
 			.withMunicipalityId("2281")
-			.withPhoneNumber("0703423521")
+			.withPhoneNumber("0701740649")
 			.withStatus("ACTIVE");
 		final var userResponse = UserResponse.create()
-			.withEmail("test@test.com")
+			.withEmail("test@testmail.com")
 			.withMunicipalityId("2281")
-			.withPhoneNumber("0703423521")
+			.withPhoneNumber("0701740639")
 			.withStatus("ACTIVE");
 
 		when(userServiceMock.createUser(any(UserRequest.class))).thenReturn(userResponse);
@@ -66,7 +66,7 @@ class UserResourceTest {
 		final var userResponse = UserResponse.create()
 			.withEmail(email)
 			.withMunicipalityId("2281")
-			.withPhoneNumber("0703423521")
+			.withPhoneNumber("0701740629")
 			.withStatus("ACTIVE");
 
 		when(userServiceMock.getUserByEmail(email)).thenReturn(userResponse);
@@ -88,12 +88,12 @@ class UserResourceTest {
 		final var email = "test@test.com";
 		final var userRequest = UpdateUserRequest.create()
 			.withMunicipalityId("2281")
-			.withPhoneNumber("0703423521")
+			.withPhoneNumber("0701740669")
 			.withStatus("ACTIVE");
 		final var userResponse = UserResponse.create()
 			.withEmail(email)
 			.withMunicipalityId("2281")
-			.withPhoneNumber("0703423521")
+			.withPhoneNumber("0701740619")
 			.withStatus("ACTIVE");
 
 		when(userServiceMock.updateUser(any(UpdateUserRequest.class), eq(email))).thenReturn(userResponse);
@@ -114,7 +114,7 @@ class UserResourceTest {
 
 	@Test
 	void deleteUser() {
-		final var email = "test@test.com";
+		final var email = "test@testmail.com";
 
 		doNothing().when(userServiceMock).deleteUser(email);
 		final var response = webTestClient.delete()

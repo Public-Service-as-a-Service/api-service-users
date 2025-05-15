@@ -1,6 +1,6 @@
 # Users
 
-_Manage users._
+_Service providing functionality for management of users._
 
 ## Getting Started
 
@@ -46,14 +46,7 @@ _Manage users._
 
 ## Dependencies
 
-This microservice depends on the following services:
-
-- **Service Name**
-  - **Purpose:** Brief description of what the dependent service does.
-  - **Repository:** [Link to the repository](https://github.com/Sundsvallskommun/service_name)
-  - **Setup Instructions:** Refer to its documentation for installation and configuration steps.
-
-Ensure that these services are running and properly configured before starting this microservice.
+This microservice has no dependencies to other services
 
 ## API Documentation
 
@@ -95,20 +88,6 @@ Configuration is crucial for the application to run successfully. Ensure all nec
       url: jdbc:mysql://localhost:3306/your_database
       username: your_db_username
       password: your_db_password
-  ```
-- **External Service URLs:**
-
-  ```yaml
-  integration:
-    service:
-      url: http://dependency_service_url
-      oauth2:
-        client-id: some-client-id
-        client-secret: some-client-secret
-
-  service:
-    oauth2:
-      token-url: http://dependecy_service_token_url
   ```
 
 ### Database Initialization

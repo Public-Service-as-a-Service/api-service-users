@@ -8,11 +8,11 @@ public class UserResponse {
 
 	@Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
 	private String email;
-	@Schema(description = "Telefonnummer", example = "0701234567")
+	@Schema(description = "Telefonnummer", example = "0701740669")
 	private String phoneNumber;
 	@Schema(description = "Kommun-id", example = "2281")
 	private String municipalityId;
-	@Schema(description = "Stratus", example = "active")
+	@Schema(description = "Status", example = "ACTIVE")
 	private String status;
 
 	public static UserResponse create() {

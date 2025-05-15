@@ -38,8 +38,8 @@ class UserRepositoryTest {
 	@Test
 	void createUser() {
 		final var userEntity = UserEntity.create()
-			.withEmail("TestMail123@hotmail.com")
-			.withPhoneNumber("0031234567")
+			.withEmail("Test@testmail.com")
+			.withPhoneNumber("0701740679")
 			.withMunicipalityId("2281")
 			.withStatus(Status.INACTIVE);
 
@@ -47,8 +47,8 @@ class UserRepositoryTest {
 		final var parsedEntity = userRepository.findByEmail(savedEntity.getEmail());
 
 		assertThat(savedEntity.getId()).isNotNull();
-		assertThat(savedEntity.getEmail()).isEqualTo("TestMail123@hotmail.com");
-		assertThat(savedEntity.getPhoneNumber()).isEqualTo("0031234567");
+		assertThat(savedEntity.getEmail()).isEqualTo("Test@testmail.com");
+		assertThat(savedEntity.getPhoneNumber()).isEqualTo("0701740679");
 		assertThat(savedEntity.getMunicipalityId()).isEqualTo("2281");
 		assertThat(savedEntity.getStatus()).isEqualTo(Status.INACTIVE);
 		assertThat(parsedEntity).isPresent();
