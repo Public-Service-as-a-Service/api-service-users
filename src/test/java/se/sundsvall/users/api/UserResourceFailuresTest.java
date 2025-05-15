@@ -28,10 +28,10 @@ class UserResourceFailuresTest {
 	void saveUserWithBadRequest() {
 		// Arrange
 		final var userRequest = UserRequest.create()
-			.withEmail("testewom")
-			.withPhoneNumber("fgewrgr")
-			.withMunicipalityId("dew")
-			.withStatus("oklart");
+			.withEmail("notamailtestcom")
+			.withPhoneNumber("number0000000000")
+			.withMunicipalityId("id2222")
+			.withStatus("status");
 		// Act
 		final var response = webTestClient.post()
 			.uri("/api/users")
@@ -88,7 +88,7 @@ class UserResourceFailuresTest {
 	@Test
 	void updateUserWithBadRequest() {
 		// Arrange
-		final String email = "test@gmail.com";
+		final String email = "test@testmail.com";
 		final var userRequest = UserRequest.create()
 			.withEmail(email)
 			.withPhoneNumber("numberplate")

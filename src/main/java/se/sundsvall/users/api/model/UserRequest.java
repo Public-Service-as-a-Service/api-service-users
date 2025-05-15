@@ -12,11 +12,11 @@ import java.util.Objects;
 public class UserRequest {
 
 	@Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
-	@Email(message = "must be a valid Email-adress")
+	@Email(message = "must be a valid Email-adress", regexp = "^[A-Za-zÅÄÖåäö0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
 	@NotBlank(message = "cannot be blank")
 	private String email;
 
-	@Schema(description = "Telefonnummer", example = "0701234567")
+	@Schema(description = "Telefonnummer", example = "0701740669")
 	@NotBlank(message = "cannot be blank")
 	@ValidMobileNumber(message = "must be a valid mobile number")
 	private String phoneNumber;

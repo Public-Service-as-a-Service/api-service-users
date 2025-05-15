@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class UpdateUserRequest {
 
-	@Schema(description = "Telefonnummer", example = "0701234567")
+	@Schema(description = "Telefonnummer", example = "0701740669")
 	@NotBlank(message = "cannot be blank")
 	@ValidMobileNumber(message = "must be a valid mobile number")
 	private String phoneNumber;

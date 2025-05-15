@@ -57,8 +57,8 @@ class UserServiceTest {
 	@Test
 	void createUser() {
 		// Arrange
-		final var email = "TestMail123@mail.se";
-		final var phoneNumber = "99070121212";
+		final var email = "Test@testmail.com";
+		final var phoneNumber = "0701740669";
 		final var municipalityId = "2281";
 		final var status = "ACTIVE";
 		final var userRequestMock = UserRequest.create().withEmail(email)
@@ -93,8 +93,8 @@ class UserServiceTest {
 	@Test
 	void updateUser() {
 		// Arrange
-		final var email = "TestMail123@mail.se";
-		final var phoneNumber = "0701235223";
+		final var email = "Test@testmail.se";
+		final var phoneNumber = "0701740619";
 		final var municipalityId = "2281";
 		final var status = "ACTIVE";
 		final var userRequestMock = UpdateUserRequest.create()
@@ -128,7 +128,7 @@ class UserServiceTest {
 	void deleteUser() {
 
 		// Arrange
-		final var email = "TestMail123@mail.se";
+		final var email = "Test@testmail.se";
 
 		// Act
 		userService.deleteUser(email);
@@ -141,7 +141,7 @@ class UserServiceTest {
 	@Test
 	void createUserAlreadyExists() {
 		// Arrange
-		final var email = "TestMail123@mail.se";
+		final var email = "Test@testmail.se";
 		final var userRequest = new UserRequest();
 		userRequest.setEmail(email);
 
@@ -163,7 +163,7 @@ class UserServiceTest {
 	@Test
 	void getUserByEmailNotFound() {
 		// Arrange
-		final var email = "Testmail123@mail.com";
+		final var email = "Test@testmail.com";
 
 		when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.empty());
 
@@ -183,7 +183,7 @@ class UserServiceTest {
 	@Test
 	void updateUserNotFound() {
 		// Arrange
-		final var email = "TestMail123@mail.se";
+		final var email = "Test@testmail.se";
 		final var request = UpdateUserRequest.create();
 
 		// Mock
