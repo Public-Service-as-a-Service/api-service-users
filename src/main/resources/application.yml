@@ -23,7 +23,5 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
-springdoc:
-  swagger-ui:
-    operationsSorter: method
+
 

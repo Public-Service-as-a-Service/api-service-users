@@ -8,6 +8,7 @@ import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.db.UserRepository;
 import se.sundsvall.users.integration.db.model.Enum.Status;
+import se.sundsvall.users.integration.db.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
 
 import static java.lang.String.format;
@@ -52,10 +53,11 @@ public class UserService {
 		var userEntity = userRepository.findByEmail(email)
 			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email)));
 
-		userEntity.setPhoneNumber(userRequest.getPhoneNumber());
-		userEntity.setMunicipalityId(userRequest.getMunicipalityId());
-		userEntity.setStatus(Status.valueOf(userRequest.getStatus().toUpperCase()));
-		userRepository.save(userEntity);
+		userRepository.save(userEntity
+			.withEmail(email)
+			.withPhoneNumber(userRequest.getPhoneNumber())
+			.withMunicipalityId(userRequest.getMunicipalityId())
+			.withStatus(Status.valueOf(userRequest.getStatus().toUpperCase())));
 
 		return userMapper.toUserResponse(userEntity);
 	}
