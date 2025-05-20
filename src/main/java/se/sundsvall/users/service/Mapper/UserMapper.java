@@ -21,9 +21,9 @@ public class UserMapper {
 			.orElse(null);
 	}
 
-	public UserEntity toUserEntity(UserRequest userRequest) {
+	public UserEntity toUserEntity(UserRequest userRequest, String partyId) {
 		return Optional.ofNullable(userRequest)
-			.map(request -> UserEntity.create().withPartyId(request.getPersonalNumber())
+			.map(request -> UserEntity.create().withPartyId(partyId)
 				.withEmail(request.getEmail())
 				.withPhoneNumber(request.getPhoneNumber())
 				.withMunicipalityId(request.getMunicipalityId())

@@ -10,11 +10,11 @@ import se.sundsvall.users.integration.citizen.configuration.CitizenIntegrationCo
 import static se.sundsvall.users.integration.citizen.configuration.CitizenIntegrationConfiguration.CLIENT_ID;
 
 @FeignClient(
-        name = CLIENT_ID,
-        url = "${integration.citizen.base-url}",
-        configuration = CitizenIntegrationConfiguration.class)
+	name = CLIENT_ID,
+	url = "${integration.citizen.base-url}",
+	configuration = CitizenIntegrationConfiguration.class)
 @CircuitBreaker(name = CLIENT_ID)
 public interface CitizenClient {
-    @GetMapping("/api/v2/citizen/{personNumber}/guid")
-    String getTest(@PathVariable String personNumber);
+	@GetMapping("/api/v2/citizen/{personNumber}/guid")
+	String getCitizenPartyId(@PathVariable String personNumber);
 }

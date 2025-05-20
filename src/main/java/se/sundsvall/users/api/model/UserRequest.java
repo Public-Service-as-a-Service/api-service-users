@@ -19,7 +19,7 @@ public class UserRequest {
 	@NotBlank(message = "cannot be blank")
 	private String email;
 
-	@Schema(description = "Personal number", example = "198602300337" )
+	@Schema(description = "Personal number", example = "198602300337")
 	@Pattern(regexp = "^((19|20)[0-9]{10})?$")
 	private String personalNumber;
 

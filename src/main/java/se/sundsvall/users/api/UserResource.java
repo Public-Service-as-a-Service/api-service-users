@@ -41,7 +41,7 @@ public class UserResource {
 	@ApiResponse(responseCode = "201", description = "Successful operation", useReturnTypeSchema = true)
 	@ExceptionHandler(UsernameNotFoundException.class)
 	public ResponseEntity<UserResponse> saveUser(@RequestBody @Valid UserRequest userRequest) {
-		final var user = userService.createUser(userRequest);
+		final var user = userService.createUserWithCitizenDB(userRequest);
 		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/user/").buildAndExpand(userRequest).toUri())
 			.body(user);
 	}

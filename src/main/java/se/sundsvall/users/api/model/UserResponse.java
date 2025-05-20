@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class UserResponse {
 
-	@Schema(description =  "personnummer", example = "198602300337")
+	@Schema(description = "personnummer", example = "198602300337")
 	private String personalNumber;
 	@Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
 	private String email;
