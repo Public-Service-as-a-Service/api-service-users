@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -15,6 +14,7 @@ import org.zalando.problem.violations.ConstraintViolationProblem;
 import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
+import se.sundsvall.users.integration.citizen.CitizenIntegration;
 import se.sundsvall.users.service.UserService;
 
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
@@ -30,9 +30,10 @@ import static org.springframework.http.ResponseEntity.ok;
 @ApiResponse(responseCode = "503", description = "Server Error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 public class UserResource {
 	private final UserService userService;
-
-	public UserResource(UserService userService) {
+	private final CitizenIntegration citizenIntegration;
+	public UserResource(UserService userService, CitizenIntegration citizenIntegration) {
 		this.userService = userService;
+		this.citizenIntegration = citizenIntegration;
 	}
 
 	@PostMapping("users")
@@ -44,7 +45,7 @@ public class UserResource {
 	}
 
 	@GetMapping("users/{email}")
-	@ExceptionHandler(UsernameNotFoundException.class)
+
 	public ResponseEntity<UserResponse> getUserByEmail(@Valid @Email @PathVariable String email) {
 		var user = userService.getUserByEmail(email);
 		return user != null ? ok(user) : ResponseEntity.noContent().build();
@@ -64,5 +65,10 @@ public class UserResource {
 	public ResponseEntity<Void> deleteByEmail(@Valid @Email @PathVariable String email) {
 		userService.deleteUser(email);
 		return ResponseEntity.noContent().build();
+	}
+	@GetMapping
+	public ResponseEntity<String> citizenTest(String personNumber){
+		final var response = citizenIntegration.getTest(personNumber);
+		return response != null ? ok(response) : ResponseEntity.noContent().build();
 	}
 }
