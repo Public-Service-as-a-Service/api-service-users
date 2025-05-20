@@ -14,7 +14,7 @@ public class UserMapper {
 	public UserResponse toUserResponse(final UserEntity user) {
 		return Optional.ofNullable(user)
 			.map(entity -> UserResponse.create()
-				.withEmail(entity.getEmail())
+				.withEmail(entity.getEmail()).withPersonalNumber(entity.getPartyId())
 				.withPhoneNumber(entity.getPhoneNumber())
 				.withMunicipalityId(entity.getMunicipalityId())
 				.withStatus(String.valueOf(entity.getStatus())))
@@ -23,7 +23,7 @@ public class UserMapper {
 
 	public UserEntity toUserEntity(UserRequest userRequest) {
 		return Optional.ofNullable(userRequest)
-			.map(request -> UserEntity.create()
+			.map(request -> UserEntity.create().withPartyId(request.getPersonalNumber())
 				.withEmail(request.getEmail())
 				.withPhoneNumber(request.getPhoneNumber())
 				.withMunicipalityId(request.getMunicipalityId())

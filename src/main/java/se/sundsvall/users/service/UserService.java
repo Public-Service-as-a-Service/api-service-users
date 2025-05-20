@@ -24,7 +24,7 @@ public class UserService {
 	private final UserMapper userMapper;
 
 	private final String USER_NOT_FOUND = "user %s was not found";
-	private final String USER_ALREADY_EXISTING = "user %s already exist";
+	private final String USER_ALREADY_EXISTING = "user already exists";
 
 	public UserService(UserRepository userRepository, UserMapper userMapper) {
 		this.userRepository = userRepository;
@@ -33,18 +33,23 @@ public class UserService {
 
 	// CREATE
 	public UserResponse createUser(UserRequest userRequest) {
-		if (userRepository.findByEmail(userRequest.getEmail()).isEmpty()) {
+		if (userRepository.findByEmail(userRequest.getEmail()).isEmpty()||userRepository.findByPartyId(userRequest.getPersonalNumber()).isEmpty()) {
 			final var userEntity = userRepository.save(userMapper.toUserEntity(userRequest));
 
 			return userMapper.toUserResponse(userEntity);
 		}
-		throw Problem.valueOf(CONFLICT, format(USER_ALREADY_EXISTING, userRequest.getEmail()));
+		throw Problem.valueOf(CONFLICT, format(USER_ALREADY_EXISTING));
 	}
 
 	// READ
 	public UserResponse getUserByEmail(String email) {
 		return userRepository.findByEmail(email).map(userMapper::toUserResponse)
 			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email)));
+	}
+
+	public UserResponse getUserByPersonalNumber(String personalNumber) {
+		return userRepository.findByPartyId(personalNumber).map(userMapper::toUserResponse)
+			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
 	}
 
 	// UPDATE
@@ -63,7 +68,11 @@ public class UserService {
 	}
 
 	// DELETE
-	public void deleteUser(String email) {
+	public void deleteUserByEmail(String email) {
 		userRepository.deleteByEmail(email);
+	}
+
+	public void deleteUserByPN(String personalNumber) {
+		userRepository.deleteByEmail(personalNumber);
 	}
 }

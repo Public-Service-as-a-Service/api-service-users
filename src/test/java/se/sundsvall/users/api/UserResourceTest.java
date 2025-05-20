@@ -116,7 +116,7 @@ class UserResourceTest {
 	void deleteUser() {
 		final var email = "test@testmail.com";
 
-		doNothing().when(userServiceMock).deleteUser(email);
+		doNothing().when(userServiceMock).deleteUserByEmail(email);
 		final var response = webTestClient.delete()
 			.uri("/api/users/{email}", email)
 			.exchange()
@@ -125,7 +125,7 @@ class UserResourceTest {
 			.returnResult()
 			.getResponseBody();
 
-		verify(userServiceMock).deleteUser(email);
+		verify(userServiceMock).deleteUserByEmail(email);
 
 	}
 
