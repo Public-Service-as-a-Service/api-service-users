@@ -14,5 +14,6 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
 	Optional<UserEntity> findByPartyId(String personalNumber);
 
 	void deleteByEmail(String email);
+
 	void deleteByPartyId(String partyId);
 }

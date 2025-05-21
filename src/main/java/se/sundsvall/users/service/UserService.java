@@ -82,7 +82,7 @@ public class UserService {
 
 	public UserResponse getUserByPartyId(String partyId) {
 		return userRepository.findByPartyId(partyId).map(userMapper::toUserResponse)
-				.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, partyId)));
+			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, partyId)));
 	}
 
 	// UPDATE
@@ -99,28 +99,30 @@ public class UserService {
 
 		return userMapper.toUserResponse(userEntity);
 	}
+
 	public UserResponse updateUserByPersonalNumber(UpdateUserRequest userRequest, String personalNumber) {
 
 		var userEntity = userRepository.findByPartyId(citizenIntegration.getCitizenPartyId(personalNumber))
-				.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
+			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
 
 		userRepository.save(userEntity
-				.withPhoneNumber(userRequest.getPhoneNumber())
-				.withMunicipalityId(userRequest.getMunicipalityId())
-				.withStatus(Status.valueOf(userRequest.getStatus().toUpperCase())));
+			.withPhoneNumber(userRequest.getPhoneNumber())
+			.withMunicipalityId(userRequest.getMunicipalityId())
+			.withStatus(Status.valueOf(userRequest.getStatus().toUpperCase())));
 
 		return userMapper.toUserResponse(userEntity);
 	}
+
 	public UserResponse updateUserByPartyId(UpdateUserRequest userRequest, String partyId) {
 
 		var userEntity = userRepository.findByPartyId(partyId)
-				.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, partyId)));
+			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, partyId)));
 
 		userRepository.save(userEntity
-				.withPartyId(partyId)
-				.withPhoneNumber(userRequest.getPhoneNumber())
-				.withMunicipalityId(userRequest.getMunicipalityId())
-				.withStatus(Status.valueOf(userRequest.getStatus().toUpperCase())));
+			.withPartyId(partyId)
+			.withPhoneNumber(userRequest.getPhoneNumber())
+			.withMunicipalityId(userRequest.getMunicipalityId())
+			.withStatus(Status.valueOf(userRequest.getStatus().toUpperCase())));
 
 		return userMapper.toUserResponse(userEntity);
 	}
@@ -136,6 +138,6 @@ public class UserService {
 
 	public void deleteUserByPN(String personalNumber) {
 		userRepository.deleteByPartyId(citizenIntegration.getCitizenPartyId(personalNumber));
-			//	.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
+		// .orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
 	}
 }

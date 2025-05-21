@@ -89,7 +89,7 @@ public class UserResource {
 	public ResponseEntity<UserResponse> updateUserByPartyId(@Valid @UUID @PathVariable String partyId, @RequestBody @Valid UpdateUserRequest userRequest) {
 		var user = userService.updateUserByPartyId(userRequest, partyId);
 		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/user/").buildAndExpand(userRequest).toUri())
-				.body(user);
+			.body(user);
 	}
 
 	@DeleteMapping("users/email/{email}")
