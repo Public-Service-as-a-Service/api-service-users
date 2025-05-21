@@ -75,12 +75,18 @@ public class UserService {
 	}
 
 	public UserResponse getUserByPersonalNumber(String personalNumber) {
-		return userRepository.findByPartyId(personalNumber).map(userMapper::toUserResponse)
+		var partyId = citizenIntegration.getCitizenPartyId(personalNumber);
+		return userRepository.findByPartyId(partyId).map(userMapper::toUserResponse)
 			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
 	}
 
+	public UserResponse getUserByPartyId(String partyId) {
+		return userRepository.findByPartyId(partyId).map(userMapper::toUserResponse)
+				.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, partyId)));
+	}
+
 	// UPDATE
-	public UserResponse updateUser(UpdateUserRequest userRequest, String email) {
+	public UserResponse updateUserByEmail(UpdateUserRequest userRequest, String email) {
 
 		var userEntity = userRepository.findByEmail(email)
 			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email)));
@@ -93,13 +99,43 @@ public class UserService {
 
 		return userMapper.toUserResponse(userEntity);
 	}
+	public UserResponse updateUserByPersonalNumber(UpdateUserRequest userRequest, String personalNumber) {
+
+		var userEntity = userRepository.findByPartyId(citizenIntegration.getCitizenPartyId(personalNumber))
+				.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
+
+		userRepository.save(userEntity
+				.withPhoneNumber(userRequest.getPhoneNumber())
+				.withMunicipalityId(userRequest.getMunicipalityId())
+				.withStatus(Status.valueOf(userRequest.getStatus().toUpperCase())));
+
+		return userMapper.toUserResponse(userEntity);
+	}
+	public UserResponse updateUserByPartyId(UpdateUserRequest userRequest, String partyId) {
+
+		var userEntity = userRepository.findByPartyId(partyId)
+				.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, partyId)));
+
+		userRepository.save(userEntity
+				.withPartyId(partyId)
+				.withPhoneNumber(userRequest.getPhoneNumber())
+				.withMunicipalityId(userRequest.getMunicipalityId())
+				.withStatus(Status.valueOf(userRequest.getStatus().toUpperCase())));
+
+		return userMapper.toUserResponse(userEntity);
+	}
 
 	// DELETE
 	public void deleteUserByEmail(String email) {
 		userRepository.deleteByEmail(email);
 	}
 
+	public void deleteUserByPartyId(String partyId) {
+		userRepository.deleteByPartyId(partyId);
+	}
+
 	public void deleteUserByPN(String personalNumber) {
-		userRepository.deleteByEmail(personalNumber);
+		userRepository.deleteByPartyId(citizenIntegration.getCitizenPartyId(personalNumber));
+			//	.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
 	}
 }
