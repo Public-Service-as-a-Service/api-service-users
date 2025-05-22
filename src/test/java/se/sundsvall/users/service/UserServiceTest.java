@@ -131,7 +131,7 @@ class UserServiceTest {
 		final var email = "Test@testmail.se";
 
 		// Act
-		userService.deleteUser(email);
+		userService.deleteUserByEmail(email);
 
 		// Verify/Assert
 		verify(userRepositoryMock).deleteByEmail(email);
