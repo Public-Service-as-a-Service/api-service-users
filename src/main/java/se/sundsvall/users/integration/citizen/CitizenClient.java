@@ -16,5 +16,5 @@ import static se.sundsvall.users.integration.citizen.configuration.CitizenIntegr
 @CircuitBreaker(name = CLIENT_ID)
 public interface CitizenClient {
 	@GetMapping("/api/v2/citizen/{personNumber}/guid")
-	String getCitizenPartyId(@PathVariable String personNumber);
+	String getCitizenPartyId(@PathVariable String personNumber, @RequestParam("municipalityId") String municipalityId);
 }

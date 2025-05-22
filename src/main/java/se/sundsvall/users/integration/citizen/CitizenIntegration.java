@@ -17,10 +17,9 @@ public class CitizenIntegration {
 		this.objectMapper = objectMapper;
 	}
 
-	public String getCitizenPartyId(final String CitizenPartyId) {
+	public String getCitizenPartyId(final String personNumber, final String municipalityId) {
 		try {
-			String answer = client.getCitizenPartyId(CitizenPartyId);
-			return objectMapper.readValue(answer, String.class);
+			return client.getCitizenPartyId(personNumber, municipalityId);
 		} catch (final Exception e) {
 			LOG.info("Unable to get this", e);
 			return null;

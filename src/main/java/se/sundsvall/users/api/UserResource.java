@@ -1,6 +1,5 @@
 package se.sundsvall.users.api;
 
-import com.nimbusds.openid.connect.sdk.assurance.evidences.PersonalNumber;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,10 +39,10 @@ public class UserResource {
 
 	@PostMapping("users")
 	@ApiResponse(responseCode = "201", description = "Successful operation", useReturnTypeSchema = true)
-	@ExceptionHandler(UsernameNotFoundException.class)
+	@ApiResponse(responseCode = "409", description = "Already exists", useReturnTypeSchema = true)
 	public ResponseEntity<UserResponse> saveUser(@RequestBody @Valid UserRequest userRequest) {
-		final var user = userService.createUserWithCitizenDB(userRequest);
-		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/user/").buildAndExpand(userRequest).toUri())
+		final var user = userService.createUserWithPartyId(userRequest);
+		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/users/").buildAndExpand(userRequest).toUri())
 			.body(user);
 	}
 
@@ -53,13 +52,13 @@ public class UserResource {
 		return user != null ? ok(user) : ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("users/PN/{personalNumber}")
-	public ResponseEntity<UserResponse> getUserByPersonalNumber(@Valid @ValidPersonalNumber @PathVariable String personalNumber) {
-		var user = userService.getUserByPersonalNumber(personalNumber);
+	@GetMapping("users/personalNumbers/{personalNumber}")
+	public ResponseEntity<UserResponse> getUserByPersonalNumber(@Valid @ValidPersonalNumber @PathVariable String personalNumber, String municipalityId) {
+		var user = userService.getUserByPersonalNumber(personalNumber, municipalityId);
 		return user != null ? ok(user) : ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("users/partyId/{partyId}")
+	@GetMapping("users/partyIds/{partyId}")
 	public ResponseEntity<UserResponse> getUserByPartyId(@Valid @UUID @PathVariable String partyId) {
 		var user = userService.getUserByPartyId(partyId);
 		return user != null ? ok(user) : ResponseEntity.noContent().build();
@@ -70,25 +69,25 @@ public class UserResource {
 	@Validated
 	public ResponseEntity<UserResponse> updateUserByEmail(@Valid @Email @PathVariable String email, @RequestBody @Valid UpdateUserRequest userRequest) {
 		var user = userService.updateUserByEmail(userRequest, email);
-		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/user/").buildAndExpand(userRequest).toUri())
+		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/users/").buildAndExpand(userRequest).toUri())
 			.body(user);
 	}
 
-	@PutMapping("users/PN/{personalNumber}")
+	@PutMapping("users/personalNumbers/{personalNumber}")
 	@ApiResponse(responseCode = "201", description = "Successful operation", useReturnTypeSchema = true)
 	@Validated
-	public ResponseEntity<UserResponse> updateUserByPersonalNumber(@Valid @ValidPersonalNumber @PathVariable String personalNumber, @RequestBody @Valid UpdateUserRequest userRequest) {
-		var user = userService.updateUserByPersonalNumber(userRequest, personalNumber);
-		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/user/").buildAndExpand(userRequest).toUri())
+	public ResponseEntity<UserResponse> updateUserByPersonalNumber(@Valid @ValidPersonalNumber @PathVariable String personalNumber, String municipalityId, @RequestBody @Valid UpdateUserRequest userRequest) {
+		var user = userService.updateUserByPersonalNumber(userRequest, personalNumber, municipalityId);
+		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/users/").buildAndExpand(userRequest).toUri())
 			.body(user);
 	}
 
-	@PutMapping("users/partyId/{partyId}")
+	@PutMapping("users/partyIds/{partyId}")
 	@ApiResponse(responseCode = "201", description = "Successful operation", useReturnTypeSchema = true)
 	@Validated
 	public ResponseEntity<UserResponse> updateUserByPartyId(@Valid @UUID @PathVariable String partyId, @RequestBody @Valid UpdateUserRequest userRequest) {
 		var user = userService.updateUserByPartyId(userRequest, partyId);
-		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/user/").buildAndExpand(userRequest).toUri())
+		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/users/").buildAndExpand(userRequest).toUri())
 			.body(user);
 	}
 
@@ -99,14 +98,14 @@ public class UserResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping("users/PN/{personalNumber}")
+	@DeleteMapping("users/personalNumbers/{personalNumber}")
 	@ApiResponse(responseCode = "204", description = "Successful operation", useReturnTypeSchema = true)
-	public ResponseEntity<Void> deleteByPersonalNumber(@Valid @ValidPersonalNumber @PathVariable String personalNumber) {
-		userService.deleteUserByPN(personalNumber);
+	public ResponseEntity<Void> deleteByPersonalNumber(@Valid @ValidPersonalNumber @PathVariable String personalNumber, String municipalityId) {
+		userService.deleteUserByPN(personalNumber, municipalityId);
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping("users/partyId/{partyId}")
+	@DeleteMapping("users/partyIds/{partyId}")
 	@ApiResponse(responseCode = "204", description = "Successful operation", useReturnTypeSchema = true)
 	public ResponseEntity<Void> deleteByPartyId(@Valid @UUID @PathVariable String partyId) {
 		userService.deleteUserByPartyId(partyId);

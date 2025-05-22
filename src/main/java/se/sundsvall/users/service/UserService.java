@@ -49,13 +49,14 @@ public class UserService {
 //	}
 
 	// CREATE **Går det göra den finare??**
-	public UserResponse createUserWithCitizenDB(UserRequest userRequest) {
+	public UserResponse createUserWithPartyId(UserRequest userRequest) {
 
 		String partyId = null;
 		String personalNumber = userRequest.getPersonalNumber();
+		String municipalityId = userRequest.getMunicipalityId();
 
 		if (personalNumber != null && !personalNumber.isBlank()) {
-			partyId = citizenIntegration.getCitizenPartyId(userRequest.getPersonalNumber());
+			partyId = citizenIntegration.getCitizenPartyId(personalNumber, municipalityId);
 		}
 		if (partyId == null) {
 			partyId = UUID.randomUUID().toString();
@@ -74,8 +75,8 @@ public class UserService {
 			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, email)));
 	}
 
-	public UserResponse getUserByPersonalNumber(String personalNumber) {
-		var partyId = citizenIntegration.getCitizenPartyId(personalNumber);
+	public UserResponse getUserByPersonalNumber(String personalNumber, String municipalityId) {
+		var partyId = citizenIntegration.getCitizenPartyId(personalNumber, municipalityId);
 		return userRepository.findByPartyId(partyId).map(userMapper::toUserResponse)
 			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
 	}
@@ -100,9 +101,9 @@ public class UserService {
 		return userMapper.toUserResponse(userEntity);
 	}
 
-	public UserResponse updateUserByPersonalNumber(UpdateUserRequest userRequest, String personalNumber) {
+	public UserResponse updateUserByPersonalNumber(UpdateUserRequest userRequest, String personalNumber, String personNumber) {
 
-		var userEntity = userRepository.findByPartyId(citizenIntegration.getCitizenPartyId(personalNumber))
+		var userEntity = userRepository.findByPartyId(citizenIntegration.getCitizenPartyId(personalNumber, personNumber))
 			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
 
 		userRepository.save(userEntity
@@ -136,8 +137,8 @@ public class UserService {
 		userRepository.deleteByPartyId(partyId);
 	}
 
-	public void deleteUserByPN(String personalNumber) {
-		userRepository.deleteByPartyId(citizenIntegration.getCitizenPartyId(personalNumber));
+	public void deleteUserByPN(String personalNumber, String personNumber) {
+		userRepository.deleteByPartyId(citizenIntegration.getCitizenPartyId(personalNumber, personNumber));
 		// .orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
 	}
 }
