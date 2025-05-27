@@ -21,9 +21,7 @@ spring:
             database:
               action: validate
   flyway:
-    enabled: true
-    baseline-on-migrate: true
-
+    enabled: false
 
 
 

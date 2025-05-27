@@ -9,12 +9,10 @@ import org.springframework.stereotype.Component;
 public class CitizenIntegration {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CitizenIntegration.class);
-	private final CitizenClient client;
-	private final ObjectMapper objectMapper;
+	private final CitizenClient client;;
 
 	public CitizenIntegration(final CitizenClient client, final ObjectMapper objectMapper) {
 		this.client = client;
-		this.objectMapper = objectMapper;
 	}
 
 	public String getCitizenPartyId(final String personNumber, final String municipalityId) {

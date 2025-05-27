@@ -40,7 +40,7 @@ public class UserResource {
 	@PostMapping("users")
 	@ApiResponse(responseCode = "201", description = "Successful operation", useReturnTypeSchema = true)
 	@ApiResponse(responseCode = "409", description = "Already exists", useReturnTypeSchema = true)
-	public ResponseEntity<UserResponse> saveUser(@RequestBody @Valid UserRequest userRequest) {
+	public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
 		final var user = userService.createUserWithPartyId(userRequest);
 		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/users/").buildAndExpand(userRequest).toUri())
 			.body(user);

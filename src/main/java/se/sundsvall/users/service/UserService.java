@@ -137,8 +137,7 @@ public class UserService {
 		userRepository.deleteByPartyId(partyId);
 	}
 
-	public void deleteUserByPN(String personalNumber, String personNumber) {
-		userRepository.deleteByPartyId(citizenIntegration.getCitizenPartyId(personalNumber, personNumber));
-		// .orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
+	public void deleteUserByPN(String personalNumber, String municipalityId) {
+		userRepository.deleteByPartyId(citizenIntegration.getCitizenPartyId(personalNumber, municipalityId));
 	}
 }
