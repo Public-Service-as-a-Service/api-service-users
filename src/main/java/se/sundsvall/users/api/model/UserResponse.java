@@ -6,6 +6,8 @@ import java.util.Objects;
 
 public class UserResponse {
 
+	@Schema(description = "personnummer", example = "198602300337")
+	private String partyId;
 	@Schema(description = "Epost-adress", example = "kalle.kula@sundsvall.se")
 	private String email;
 	@Schema(description = "Telefonnummer", example = "0701740669")
@@ -29,6 +31,19 @@ public class UserResponse {
 
 	public UserResponse withMunicipalityId(String municipalityId) {
 		this.municipalityId = municipalityId;
+		return this;
+	}
+
+	public String getPartyId() {
+		return partyId;
+	}
+
+	public void setPartyId(String partyId) {
+		this.partyId = partyId;
+	}
+
+	public UserResponse withPartyId(String partyId) {
+		this.partyId = partyId;
 		return this;
 	}
 
