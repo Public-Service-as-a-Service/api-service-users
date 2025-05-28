@@ -4,13 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import kotlin.OptionalExpectation;
+import java.util.Objects;
 import se.sundsvall.dept44.common.validators.annotation.ValidMobileNumber;
 import se.sundsvall.dept44.common.validators.annotation.ValidMunicipalityId;
-import se.sundsvall.dept44.common.validators.annotation.ValidPersonalNumber;
 import se.sundsvall.users.api.validation.ValidEnum;
 import se.sundsvall.users.integration.db.model.Enum.Status;
-import java.util.Objects;
 
 public class UserRequest {
 

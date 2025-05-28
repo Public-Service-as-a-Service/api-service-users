@@ -1,7 +1,11 @@
 package se.sundsvall.users.service;
 
+import static java.lang.String.format;
+import static org.zalando.problem.Status.CONFLICT;
+import static org.zalando.problem.Status.NOT_FOUND;
+
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotBlank;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.zalando.problem.Problem;
 import se.sundsvall.users.api.model.UpdateUserRequest;
@@ -10,14 +14,7 @@ import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.citizen.CitizenIntegration;
 import se.sundsvall.users.integration.db.UserRepository;
 import se.sundsvall.users.integration.db.model.Enum.Status;
-import se.sundsvall.users.integration.db.model.UserEntity;
 import se.sundsvall.users.service.Mapper.UserMapper;
-
-import java.util.UUID;
-
-import static java.lang.String.format;
-import static org.zalando.problem.Status.CONFLICT;
-import static org.zalando.problem.Status.NOT_FOUND;
 
 @Service
 @Transactional
@@ -49,7 +46,7 @@ public class UserService {
 //	}
 
 	// CREATE **Går det göra den finare??**
-	public UserResponse createUserWithPartyId(UserRequest userRequest) {
+	public UserResponse createUser(UserRequest userRequest) {
 
 		String partyId = null;
 		String personalNumber = userRequest.getPersonalNumber();
@@ -101,15 +98,15 @@ public class UserService {
 		return userMapper.toUserResponse(userEntity);
 	}
 
-	public UserResponse updateUserByPersonalNumber(UpdateUserRequest userRequest, String personalNumber, String personNumber) {
+	public UserResponse updateUserByPersonalNumber(UpdateUserRequest updateUserRequest, String personalNumber, String municipalityId) {
 
-		var userEntity = userRepository.findByPartyId(citizenIntegration.getCitizenPartyId(personalNumber, personNumber))
+		var userEntity = userRepository.findByPartyId(citizenIntegration.getCitizenPartyId(personalNumber, municipalityId))
 			.orElseThrow(() -> Problem.valueOf(NOT_FOUND, format(USER_NOT_FOUND, personalNumber)));
 
 		userRepository.save(userEntity
-			.withPhoneNumber(userRequest.getPhoneNumber())
-			.withMunicipalityId(userRequest.getMunicipalityId())
-			.withStatus(Status.valueOf(userRequest.getStatus().toUpperCase())));
+			.withPhoneNumber(updateUserRequest.getPhoneNumber())
+			.withMunicipalityId(updateUserRequest.getMunicipalityId())
+			.withStatus(Status.valueOf(updateUserRequest.getStatus().toUpperCase())));
 
 		return userMapper.toUserResponse(userEntity);
 	}

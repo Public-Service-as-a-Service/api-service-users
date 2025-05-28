@@ -1,5 +1,8 @@
 package se.sundsvall.users.api;
 
+import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
+import static org.springframework.http.ResponseEntity.ok;
+
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -7,7 +10,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -18,9 +20,6 @@ import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.service.UserService;
-
-import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api")
@@ -41,7 +40,7 @@ public class UserResource {
 	@ApiResponse(responseCode = "201", description = "Successful operation", useReturnTypeSchema = true)
 	@ApiResponse(responseCode = "409", description = "Already exists", useReturnTypeSchema = true)
 	public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
-		final var user = userService.createUserWithPartyId(userRequest);
+		final var user = userService.createUser(userRequest);
 		return ResponseEntity.created(UriComponentsBuilder.fromPath("/api/users/").buildAndExpand(userRequest).toUri())
 			.body(user);
 	}

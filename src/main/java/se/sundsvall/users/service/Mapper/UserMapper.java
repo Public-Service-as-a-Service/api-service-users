@@ -1,12 +1,11 @@
 package se.sundsvall.users.service.Mapper;
 
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
 import se.sundsvall.users.integration.db.model.Enum.Status;
 import se.sundsvall.users.integration.db.model.UserEntity;
-
-import java.util.Optional;
 
 @Component
 public class UserMapper {

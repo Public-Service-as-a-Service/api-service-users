@@ -1,10 +1,8 @@
 package se.sundsvall.users.integration.db.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.UuidGenerator;
-import se.sundsvall.users.integration.db.model.Enum.Status;
-
 import java.io.Serializable;
+import se.sundsvall.users.integration.db.model.Enum.Status;
 
 @Entity
 @Table(name = "users",
