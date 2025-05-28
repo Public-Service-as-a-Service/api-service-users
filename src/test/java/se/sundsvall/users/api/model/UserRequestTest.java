@@ -25,17 +25,20 @@ class UserRequestTest {
 		final var phoneNumber = "phoneNumber";
 		final var municipalityId = "municipalityId";
 		final var status = Status.valueOf("ACTIVE");
+		final var personalNumber = "personalNumber";
 
-		final var userEntity = UserEntity.create()
+		final var userEntity = UserRequest.create()
 			.withEmail(email)
+			.withPersonalNumber(personalNumber)
 			.withPhoneNumber(phoneNumber)
 			.withMunicipalityId(municipalityId)
-			.withStatus(status);
+			.withStatus(String.valueOf(status));
 
 		assertThat(userEntity.getEmail()).isEqualTo(email);
+		assertThat(userEntity.getPersonalNumber()).isEqualTo(personalNumber);
 		assertThat(userEntity.getPhoneNumber()).isEqualTo(phoneNumber);
 		assertThat(userEntity.getMunicipalityId()).isEqualTo(municipalityId);
-		assertThat(userEntity.getStatus()).isEqualTo(status);
+		assertThat(userEntity.getStatus()).isEqualTo(String.valueOf(status));
 	}
 
 	@Test

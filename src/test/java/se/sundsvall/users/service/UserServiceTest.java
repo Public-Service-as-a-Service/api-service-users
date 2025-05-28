@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +17,7 @@ import org.zalando.problem.Problem;
 import se.sundsvall.users.api.model.UpdateUserRequest;
 import se.sundsvall.users.api.model.UserRequest;
 import se.sundsvall.users.api.model.UserResponse;
+import se.sundsvall.users.integration.citizen.CitizenIntegration;
 import se.sundsvall.users.integration.db.UserRepository;
 import se.sundsvall.users.integration.db.model.Enum.Status;
 import se.sundsvall.users.integration.db.model.UserEntity;
@@ -26,6 +28,9 @@ class UserServiceTest {
 
 	@Mock
 	private UserRepository userRepositoryMock;
+
+	@Mock
+	private CitizenIntegration citizenIntegration;
 
 	@Mock
 	private UserMapper userMapper;
@@ -49,6 +54,50 @@ class UserServiceTest {
 		// Assert
 		assertThat(result).isSameAs(expectedUser);
 		verify(userRepositoryMock).findByEmail(email);
+		verify(userMapper).toUserResponse(userEntity);
+
+	}
+
+	@Test
+	void getUserByPersonalNumber() {
+		// Arrange
+		final var personalNumber = "198001011234";
+		final var municipalityId = "2281";
+		final var partyId = UUID.randomUUID().toString();
+		final var userEntity = UserEntity.create().withPartyId(partyId);
+		final var expectedUserResponse = UserResponse.create().withPartyId(partyId);
+
+		// Mocks
+		when(citizenIntegration.getCitizenPartyId(personalNumber, municipalityId)).thenReturn(partyId);
+		when(userRepositoryMock.findByPartyId(partyId)).thenReturn(Optional.of(userEntity));
+		when(userMapper.toUserResponse(userEntity)).thenReturn(expectedUserResponse);
+
+		// Act
+		final var result = userService.getUserByPersonalNumber(personalNumber, municipalityId);
+
+		// Assert
+		assertThat(result).isSameAs(expectedUserResponse);
+		verify(citizenIntegration).getCitizenPartyId(personalNumber, municipalityId);
+		verify(userRepositoryMock).findByPartyId(partyId);
+		verify(userMapper).toUserResponse(userEntity);
+	}
+
+	@Test
+	void getUserByPartyId() {
+		// Arrange
+		final var partyId = UUID.randomUUID().toString();
+		final var userEntity = UserEntity.create().withPartyId(partyId);
+		final var expectedUser = new UserResponse();
+
+		when(userRepositoryMock.findByPartyId(partyId)).thenReturn(Optional.of(userEntity));
+		when(userMapper.toUserResponse(userEntity)).thenReturn(expectedUser);
+
+		// Act
+		final var result = userService.getUserByPartyId(partyId);
+
+		// Assert
+		assertThat(result).isSameAs(expectedUser);
+		verify(userRepositoryMock).findByPartyId(partyId);
 		verify(userMapper).toUserResponse(userEntity);
 
 	}
@@ -97,7 +146,7 @@ class UserServiceTest {
 	}
 
 	@Test
-	void updateUser() {
+	void updateUserEmail() {
 		// Arrange
 		final var email = "Test@testmail.se";
 		final var phoneNumber = "0701740619";
@@ -131,7 +180,76 @@ class UserServiceTest {
 	}
 
 	@Test
-	void deleteUser() {
+	void updateUserByPartyId() {
+		// Arrange
+		final var partyId = UUID.randomUUID().toString();
+		final var phoneNumber = "0701740619";
+		final var municipalityId = "2281";
+		final var status = "ACTIVE";
+		final var userRequestMock = UpdateUserRequest.create()
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus(status);
+		final var userEntity = UserEntity.create().withPartyId(partyId)
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus(Status.valueOf(status));
+		final var userResponseMock = UserResponse.create().withPartyId(partyId)
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus(status);
+		// Mock
+		when(userRepositoryMock.findByPartyId(partyId)).thenReturn(Optional.of(userEntity));
+
+		when(userRepositoryMock.save(userEntity)).thenReturn(userEntity);
+		when(userMapper.toUserResponse(userEntity)).thenReturn(userResponseMock);
+
+		// Act
+		final var updatedUser = userService.updateUserByPartyId(userRequestMock, partyId);
+
+		// Verify/Assert
+		verify(userRepositoryMock).save(same(userEntity));
+		assertThat(updatedUser).isNotNull();
+		assertThat(updatedUser).isEqualTo(userResponseMock);
+	}
+
+	@Test
+	void updateUserByPersonalNumber() {
+		// Arrange
+		final var personalNumber = "198001011234";
+		final var phoneNumber = "0701740619";
+		final var municipalityId = "2281";
+		final var partyId = UUID.randomUUID().toString();
+		final var userRequestMock = UpdateUserRequest.create()
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus("ACTIVE");
+		final var existingUserEntity = UserEntity.create().withPartyId(partyId)
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus(Status.SUSPENDED);
+		final var updatedUserEntity = UserEntity.create().withPartyId(partyId).withPhoneNumber(phoneNumber);
+		final var userResponseMock = UserResponse.create().withPartyId(partyId)
+			.withPhoneNumber(phoneNumber)
+			.withMunicipalityId(municipalityId)
+			.withStatus("ACTIVE");
+		// Mock
+		when(citizenIntegration.getCitizenPartyId(personalNumber, municipalityId)).thenReturn(partyId);
+		when(userRepositoryMock.findByPartyId(partyId)).thenReturn(Optional.of(existingUserEntity));
+		when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(updatedUserEntity);
+		when(userMapper.toUserResponse(any(UserEntity.class))).thenReturn(userResponseMock);
+		// Act
+		final var result = userService.updateUserByPersonalNumber(userRequestMock, personalNumber, municipalityId);
+		// Verify/Assert
+		assertThat(result).isEqualTo(userResponseMock);
+		verify(citizenIntegration).getCitizenPartyId(personalNumber, municipalityId);
+		verify(userRepositoryMock).findByPartyId(partyId);
+		verify(userRepositoryMock).save(any(UserEntity.class));
+		assertThat(updatedUserEntity).isNotNull();
+	}
+
+	@Test
+	void deleteUserByEmail() {
 
 		// Arrange
 		final var email = "Test@testmail.se";
@@ -141,6 +259,34 @@ class UserServiceTest {
 
 		// Verify/Assert
 		verify(userRepositoryMock).deleteByEmail(email);
+
+	}
+
+	@Test
+	void deleteUserByPersonalNumber() {
+
+		// Arrange
+		final var personalNumber = "198001011234";
+
+		// Act
+		userService.deleteUserByEmail(personalNumber);
+
+		// Verify/Assert
+		verify(userRepositoryMock).deleteByEmail(personalNumber);
+
+	}
+
+	@Test
+	void deleteUserByPartyId() {
+
+		// Arrange
+		final var partyId = UUID.randomUUID().toString();
+
+		// Act
+		userService.deleteUserByPartyId(partyId);
+
+		// Verify/Assert
+		verify(userRepositoryMock).deleteByPartyId(partyId);
 
 	}
 
