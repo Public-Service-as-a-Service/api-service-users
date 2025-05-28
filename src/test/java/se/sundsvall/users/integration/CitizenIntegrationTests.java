@@ -12,6 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.sundsvall.users.integration.citizen.CitizenClient;
 import se.sundsvall.users.integration.citizen.CitizenIntegration;
 
+import java.util.UUID;
+
 @ExtendWith(MockitoExtension.class)
 class CitizenIntegrationTests {
 	@Mock
@@ -25,15 +27,15 @@ class CitizenIntegrationTests {
 		// Arrange
 		final var personalNumber = "198001011234";
 		final var municipalityId = "2281";
-		final var expectedPartyId = "party-abc-123";
+		final var partyId = UUID.randomUUID().toString();
 
-		when(MockCitizenClient.getCitizenPartyId(personalNumber, municipalityId)).thenReturn(expectedPartyId);
+		when(MockCitizenClient.getCitizenPartyId(personalNumber, municipalityId)).thenReturn(partyId);
 
 		// Act
 		final var result = citizenIntegration.getCitizenPartyId(personalNumber, municipalityId);
 
 		// Assert
-		assertThat(result).isEqualTo(expectedPartyId);
+		assertThat(result).isEqualTo(partyId);
 
 		verify(MockCitizenClient).getCitizenPartyId(personalNumber, municipalityId);
 		verifyNoMoreInteractions(MockCitizenClient);
