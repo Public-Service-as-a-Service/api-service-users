@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 import feign.FeignException;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,8 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.sundsvall.users.integration.citizen.CitizenClient;
 import se.sundsvall.users.integration.citizen.CitizenIntegration;
-
-import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 class CitizenIntegrationTests {
