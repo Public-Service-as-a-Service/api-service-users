@@ -1,5 +1,5 @@
 INSERT INTO users(
-id,
+party_id,
 email_address,
 phone_number,
 municipality_id,
