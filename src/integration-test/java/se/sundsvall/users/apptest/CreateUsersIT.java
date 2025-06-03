@@ -19,12 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("default")
 class CreateUsersIT extends AbstractAppTest {
     private static final String Request = "request.json";
-    private static final String Response = "response.json";
 
     private static final String EMAIL = "test@sundsvall.se";
-    private static final String PERSONALNUMBER = "198602300337";
     private static final String PHONE_NUMBER = "0701234567";
-    private static final String MUNICIPALITY_ID = "1440";
+    private static final String MUNICIPALITY_ID = "2281";
     private static final Status STATUS = Status.INACTIVE;
 
     @Autowired
@@ -32,6 +30,28 @@ class CreateUsersIT extends AbstractAppTest {
 
     @Test
     void test01_createUser() {
+
+        assertThat(userRepository.findByEmail(EMAIL)).isEmpty();
+
+        setupCall()
+                .withServicePath("/api/users")
+                .withHttpMethod(HttpMethod.POST)
+                .withRequest(Request)
+                .withExpectedResponseStatus(HttpStatus.CREATED)
+                .sendRequestAndVerifyResponse();
+
+        final var user = userRepository.findByEmail(EMAIL);
+        assertThat(user).isPresent();
+        assertThat(user.get().getStatus()).isNotNull();
+        assertThat(user.get().getEmail()).isEqualTo(EMAIL);
+        assertThat(user.get().getPhoneNumber()).isEqualTo(PHONE_NUMBER);
+        assertThat(user.get().getMunicipalityId()).isEqualTo(MUNICIPALITY_ID);
+        assertThat(user.get().getStatus()).isEqualTo(STATUS);
+
+    }
+
+    @Test
+    void test02_createUserWithPersonalNumber() {
 
         assertThat(userRepository.findByEmail(EMAIL)).isEmpty();
 
