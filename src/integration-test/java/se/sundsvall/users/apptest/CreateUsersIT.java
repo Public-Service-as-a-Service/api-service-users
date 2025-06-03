@@ -53,7 +53,7 @@ class CreateUsersIT extends AbstractAppTest {
     @Test
     void test02_createUserWithPersonalNumber() {
 
-        assertThat(userRepository.findByEmail(EMAIL)).isEmpty();
+        assertThat(userRepository.findByEmail("test2@sundsvall.se")).isEmpty();
 
         setupCall()
                 .withServicePath("/api/users")
