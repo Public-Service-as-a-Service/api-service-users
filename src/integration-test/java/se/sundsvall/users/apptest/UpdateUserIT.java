@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("default")
 class UpdateUserIT extends AbstractAppTest {
     private static final String REQUEST = "request.json";
-    private static final String RESPONSE = "response2.json";
+    private static final String RESPONSE = "response.json";
 
     @Autowired
     private UserRepository userRepository;
