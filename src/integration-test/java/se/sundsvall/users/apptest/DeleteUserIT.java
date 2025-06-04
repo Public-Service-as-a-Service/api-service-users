@@ -70,8 +70,6 @@ class DeleteUserIT extends AbstractAppTest {
     void test03_DeleteUserByPersonNumber() {
 
         final String partyId = "7225dc69-28d1-4064-a1a8-5c1de5da0e62";
-        final String email = "testmail1@sundsvall.se";
-        final String personNumber = "198001011234";
 
         assertThat(userRepository.findByPartyId(partyId)).isPresent();
 
