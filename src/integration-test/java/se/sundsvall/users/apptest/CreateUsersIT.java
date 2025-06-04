@@ -52,6 +52,8 @@ class CreateUsersIT extends AbstractAppTest {
     @Test
     void test02_createUserWithPersonalNumber() {
 
+        final String partyId = "5b67a8ce-8c06-41aa-96b8-31e81946e8ba";
+
         assertThat(userRepository.findByEmail("test2@sundsvall.se")).isEmpty();
 
         setupCall()
@@ -61,13 +63,14 @@ class CreateUsersIT extends AbstractAppTest {
                 .withExpectedResponseStatus(HttpStatus.CREATED)
                 .sendRequestAndVerifyResponse();
 
-        final var user = userRepository.findByEmail(EMAIL);
+        final var user = userRepository.findByEmail("test2@sundsvall.se");
         assertThat(user).isPresent();
+        assertThat(user.get().getPartyId()).isEqualTo(partyId);
         assertThat(user.get().getStatus()).isNotNull();
-        assertThat(user.get().getEmail()).isEqualTo(EMAIL);
-        assertThat(user.get().getPhoneNumber()).isEqualTo(PHONE_NUMBER);
+        assertThat(user.get().getEmail()).isEqualTo("test2@sundsvall.se");
+        assertThat(user.get().getPhoneNumber()).isEqualTo("0701234567");
         assertThat(user.get().getMunicipalityId()).isEqualTo(MUNICIPALITY_ID);
-        assertThat(user.get().getStatus()).isEqualTo(STATUS);
+        assertThat(user.get().getStatus()).isEqualTo(Status.INACTIVE);
 
     }
 
