@@ -11,6 +11,7 @@ import se.sundsvall.dept44.test.AbstractAppTest;
 import se.sundsvall.dept44.test.annotation.wiremock.WireMockAppTestSuite;
 import se.sundsvall.users.Application;
 import se.sundsvall.users.integration.db.UserRepository;
+import se.sundsvall.users.integration.db.model.Enum.Status;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,7 +35,7 @@ class UpdateUserIT extends AbstractAppTest {
     @Test
     void test01_UpdateUserWithEmail() {
 
-        final String partyId = "7225dc69-28d1-4064-a1a8-5c1de5da0e62";
+
         final String email = "testmail1@sundsvall.se";
 
         assertThat(userRepository.findByEmail(email)).isPresent();
@@ -47,5 +48,46 @@ class UpdateUserIT extends AbstractAppTest {
                 .withExpectedResponse(RESPONSE)
                 .sendRequestAndVerifyResponse();
 
+        final var user = userRepository.findByEmail(email);
+
+        assertThat(user).isPresent();
+        assertThat(user.get().getEmail()).isEqualTo(email);
+        assertThat(user.get().getPartyId()).isEqualTo("7225dc69-28d1-4064-a1a8-5c1de5da0e62");
+        assertThat(user.get().getPhoneNumber()).isEqualTo("0701234567");
+        assertThat(user.get().getMunicipalityId()).isEqualTo("2281");
+        assertThat(user.get().getStatus()).isEqualTo(Status.INACTIVE);
+    }
+
+    @Test
+    void test02_UpdateUserWithPartyId() {
+        final String partyId = "7225dc69-28d1-4064-a1a8-5c1de5da0e63";
+        assertThat(userRepository.findByPartyId(partyId)).isPresent();
+        setupCall()
+        .withServicePath("/api/users/partyIds/".concat(partyId))
+                .withHttpMethod(HttpMethod.PUT)
+                .withRequest(REQUEST)
+                .withExpectedResponseStatus(HttpStatus.CREATED)
+                .withExpectedResponse(RESPONSE)
+                .sendRequestAndVerifyResponse();
+
+        final var userEntity = userRepository.findByPartyId(partyId);
+
+        assertThat(userEntity).isPresent();
+        assertThat(userEntity.get().getEmail()).isEqualTo("testmail2@sundsvall.se");
+        assertThat(userEntity.get().getPartyId()).isEqualTo(partyId);
+        assertThat(userEntity.get().getPhoneNumber()).isEqualTo("0701234567");
+        assertThat(userEntity.get().getMunicipalityId()).isEqualTo("2281");
+        assertThat(userEntity.get().getStatus()).isEqualTo(Status.INACTIVE);
+    }
+
+    @Test
+    void test03_UpdateUserWithEmailNotFound() {
+
+        setupCall()
+        .withServicePath("/api/users/email/".concat("testmail@sundsvall.se"))
+                .withHttpMethod(HttpMethod.PUT)
+                .withRequest(REQUEST)
+                .withExpectedResponseStatus(HttpStatus.NOT_FOUND)
+                .sendRequestAndVerifyResponse();
     }
 }

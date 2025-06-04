@@ -12,7 +12,8 @@ import se.sundsvall.users.integration.citizen.configuration.CitizenIntegrationCo
 @FeignClient(
 	name = CLIENT_ID,
 	url = "${integration.citizen.base-url}",
-	configuration = CitizenIntegrationConfiguration.class)
+	configuration = CitizenIntegrationConfiguration.class,
+	dismiss404 = true)
 @CircuitBreaker(name = CLIENT_ID)
 public interface CitizenClient {
 	@GetMapping("/{personNumber}/guid")
