@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
         "/db/script/truncate.sql",
         "/db/script/UpdateUserAppTest.sql"
 })
-@ActiveProfiles("default")
 class UpdateUserIT extends AbstractAppTest {
     private static final String REQUEST = "request.json";
     private static final String RESPONSE = "response.json";

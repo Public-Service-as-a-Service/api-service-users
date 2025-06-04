@@ -19,12 +19,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @see /src/test/resources/db/script/UpdateUserAppTest.sql for data setup.
  */
-@WireMockAppTestSuite(files = "classpath:/UpdateUserIT/", classes = Application.class)
+@WireMockAppTestSuite(files = "classpath:/DeleteUserIT/", classes = Application.class)
 @Sql(scripts = {
         "/db/script/truncate.sql",
         "/db/script/UpdateUserAppTest.sql"
 })
-@ActiveProfiles("default")
 class DeleteUserIT extends AbstractAppTest {
     private static final String REQUEST = "request.json";
     private static final String RESPONSE = "response.json";
@@ -42,7 +41,6 @@ class DeleteUserIT extends AbstractAppTest {
         setupCall()
                 .withServicePath("/api/users/email/".concat(email))
                 .withHttpMethod(HttpMethod.DELETE)
-                .withRequest(REQUEST)
                 .withExpectedResponseStatus(HttpStatus.NO_CONTENT)
                 .sendRequestAndVerifyResponse();
 
@@ -60,7 +58,6 @@ class DeleteUserIT extends AbstractAppTest {
         setupCall()
                 .withServicePath("/api/users/partyIds/".concat(partyId))
                 .withHttpMethod(HttpMethod.DELETE)
-                .withRequest(REQUEST)
                 .withExpectedResponseStatus(HttpStatus.NO_CONTENT)
                 .sendRequestAndVerifyResponse();
 
@@ -81,7 +78,6 @@ class DeleteUserIT extends AbstractAppTest {
         setupCall()
                 .withServicePath("/api/users/personalNumbers/198001011234?municipalityId=2281")
                 .withHttpMethod(HttpMethod.DELETE)
-                .withRequest(REQUEST)
                 .withExpectedResponseStatus(HttpStatus.NO_CONTENT)
                 .sendRequestAndVerifyResponse();
 

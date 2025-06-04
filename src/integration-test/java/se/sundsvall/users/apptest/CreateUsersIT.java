@@ -16,7 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @WireMockAppTestSuite(files = "classpath:/CreateUsersIT/", classes = Application.class)
-@ActiveProfiles("default")
 class CreateUsersIT extends AbstractAppTest {
     private static final String Request = "request.json";
 
