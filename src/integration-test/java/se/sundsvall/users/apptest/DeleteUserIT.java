@@ -39,7 +39,7 @@ class DeleteUserIT extends AbstractAppTest {
         assertThat(userRepository.findByEmail(email)).isPresent();
 
         setupCall()
-                .withServicePath("/api/users/email/".concat(email))
+                .withServicePath("/api/users/emails/".concat(email))
                 .withHttpMethod(HttpMethod.DELETE)
                 .withExpectedResponseStatus(HttpStatus.NO_CONTENT)
                 .sendRequestAndVerifyResponse();

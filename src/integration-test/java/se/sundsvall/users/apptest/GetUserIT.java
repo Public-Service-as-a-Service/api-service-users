@@ -34,7 +34,7 @@ class GetUserIT extends AbstractAppTest {
         assertThat(userRepository.findByEmail(email)).isPresent();
 
         setupCall()
-                .withServicePath("/api/users/email/".concat(email))
+                .withServicePath("/api/users/emails/".concat(email))
                 .withHttpMethod(HttpMethod.GET)
                 .withExpectedResponseStatus(HttpStatus.OK)
                 .withExpectedResponse(RESPONSE)

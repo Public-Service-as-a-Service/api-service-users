@@ -41,7 +41,7 @@ class UpdateUserIT extends AbstractAppTest {
         assertThat(userRepository.findByEmail(email)).isPresent();
 
         setupCall()
-                .withServicePath("/api/users/email/".concat(email))
+                .withServicePath("/api/users/emails/".concat(email))
                 .withHttpMethod(HttpMethod.PUT)
                 .withRequest(REQUEST)
                 .withExpectedResponseStatus(HttpStatus.CREATED)
@@ -84,7 +84,7 @@ class UpdateUserIT extends AbstractAppTest {
     void test03_UpdateUserWithEmailNotFound() {
 
         setupCall()
-        .withServicePath("/api/users/email/".concat("testmail@sundsvall.se"))
+        .withServicePath("/api/users/emails/".concat("testmail@sundsvall.se"))
                 .withHttpMethod(HttpMethod.PUT)
                 .withRequest(REQUEST)
                 .withExpectedResponseStatus(HttpStatus.NOT_FOUND)

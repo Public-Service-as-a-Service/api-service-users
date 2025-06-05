@@ -30,10 +30,10 @@ class UserServiceTest {
 	private UserRepository userRepositoryMock;
 
 	@Mock
-	private CitizenIntegration citizenIntegration;
+	private CitizenIntegration citizenIntegrationMock;
 
 	@Mock
-	private UserMapper userMapper;
+	private UserMapper userMapperMock;
 
 	@InjectMocks
 	private UserService userService;
@@ -46,7 +46,7 @@ class UserServiceTest {
 		final var expectedUser = new UserResponse();
 
 		when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.of(userEntity));
-		when(userMapper.toUserResponse(userEntity)).thenReturn(expectedUser);
+		when(userMapperMock.toUserResponse(userEntity)).thenReturn(expectedUser);
 
 		// Act
 		final var result = userService.getUserByEmail(email);
@@ -54,7 +54,7 @@ class UserServiceTest {
 		// Assert
 		assertThat(result).isSameAs(expectedUser);
 		verify(userRepositoryMock).findByEmail(email);
-		verify(userMapper).toUserResponse(userEntity);
+		verify(userMapperMock).toUserResponse(userEntity);
 
 	}
 
@@ -68,18 +68,18 @@ class UserServiceTest {
 		final var expectedUserResponse = UserResponse.create().withPartyId(partyId);
 
 		// Mocks
-		when(citizenIntegration.getCitizenPartyId(personalNumber, municipalityId)).thenReturn(partyId);
+		when(citizenIntegrationMock.getCitizenPartyId(personalNumber, municipalityId)).thenReturn(partyId);
 		when(userRepositoryMock.findByPartyId(partyId)).thenReturn(Optional.of(userEntity));
-		when(userMapper.toUserResponse(userEntity)).thenReturn(expectedUserResponse);
+		when(userMapperMock.toUserResponse(userEntity)).thenReturn(expectedUserResponse);
 
 		// Act
 		final var result = userService.getUserByPersonalNumber(personalNumber, municipalityId);
 
 		// Assert
 		assertThat(result).isSameAs(expectedUserResponse);
-		verify(citizenIntegration).getCitizenPartyId(personalNumber, municipalityId);
+		verify(citizenIntegrationMock).getCitizenPartyId(personalNumber, municipalityId);
 		verify(userRepositoryMock).findByPartyId(partyId);
-		verify(userMapper).toUserResponse(userEntity);
+		verify(userMapperMock).toUserResponse(userEntity);
 	}
 
 	@Test
@@ -90,7 +90,7 @@ class UserServiceTest {
 		final var expectedUser = new UserResponse();
 
 		when(userRepositoryMock.findByPartyId(partyId)).thenReturn(Optional.of(userEntity));
-		when(userMapper.toUserResponse(userEntity)).thenReturn(expectedUser);
+		when(userMapperMock.toUserResponse(userEntity)).thenReturn(expectedUser);
 
 		// Act
 		final var result = userService.getUserByPartyId(partyId);
@@ -98,7 +98,7 @@ class UserServiceTest {
 		// Assert
 		assertThat(result).isSameAs(expectedUser);
 		verify(userRepositoryMock).findByPartyId(partyId);
-		verify(userMapper).toUserResponse(userEntity);
+		verify(userMapperMock).toUserResponse(userEntity);
 
 	}
 
@@ -131,8 +131,8 @@ class UserServiceTest {
 
 		when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.empty());
 		when(userRepositoryMock.save(userEntity)).thenReturn(userEntity);
-		when(userMapper.toUserEntity(eq(userRequest), anyString())).thenReturn(userEntity);
-		when(userMapper.toUserResponse(userEntity)).thenReturn(userResponse);
+		when(userMapperMock.toUserEntity(eq(userRequest), anyString())).thenReturn(userEntity);
+		when(userMapperMock.toUserResponse(userEntity)).thenReturn(userResponse);
 
 		// Act
 		var created = userService.createUser(userRequest);
@@ -168,7 +168,7 @@ class UserServiceTest {
 		when(userRepositoryMock.findByEmail(email)).thenReturn(Optional.of(userEntity));
 
 		when(userRepositoryMock.save(userEntity)).thenReturn(userEntity);
-		when(userMapper.toUserResponse(userEntity)).thenReturn(userResponseMock);
+		when(userMapperMock.toUserResponse(userEntity)).thenReturn(userResponseMock);
 
 		// Act
 		final var updatedUser = userService.updateUserByEmail(userRequestMock, email);
@@ -202,7 +202,7 @@ class UserServiceTest {
 		when(userRepositoryMock.findByPartyId(partyId)).thenReturn(Optional.of(userEntity));
 
 		when(userRepositoryMock.save(userEntity)).thenReturn(userEntity);
-		when(userMapper.toUserResponse(userEntity)).thenReturn(userResponseMock);
+		when(userMapperMock.toUserResponse(userEntity)).thenReturn(userResponseMock);
 
 		// Act
 		final var updatedUser = userService.updateUserByPartyId(userRequestMock, partyId);
@@ -234,15 +234,15 @@ class UserServiceTest {
 			.withMunicipalityId(municipalityId)
 			.withStatus("ACTIVE");
 		// Mock
-		when(citizenIntegration.getCitizenPartyId(personalNumber, municipalityId)).thenReturn(partyId);
+		when(citizenIntegrationMock.getCitizenPartyId(personalNumber, municipalityId)).thenReturn(partyId);
 		when(userRepositoryMock.findByPartyId(partyId)).thenReturn(Optional.of(existingUserEntity));
 		when(userRepositoryMock.save(any(UserEntity.class))).thenReturn(updatedUserEntity);
-		when(userMapper.toUserResponse(any(UserEntity.class))).thenReturn(userResponseMock);
+		when(userMapperMock.toUserResponse(any(UserEntity.class))).thenReturn(userResponseMock);
 		// Act
 		final var result = userService.updateUserByPersonalNumber(userRequestMock, personalNumber, municipalityId);
 		// Verify/Assert
 		assertThat(result).isEqualTo(userResponseMock);
-		verify(citizenIntegration).getCitizenPartyId(personalNumber, municipalityId);
+		verify(citizenIntegrationMock).getCitizenPartyId(personalNumber, municipalityId);
 		verify(userRepositoryMock).findByPartyId(partyId);
 		verify(userRepositoryMock).save(any(UserEntity.class));
 		assertThat(updatedUserEntity).isNotNull();
@@ -309,7 +309,7 @@ class UserServiceTest {
 
 		verify(userRepositoryMock).findByEmail(email);
 		verify(userRepositoryMock, never()).save(any());
-		verifyNoMoreInteractions(userRepositoryMock, userMapper);
+		verifyNoMoreInteractions(userRepositoryMock, userMapperMock);
 	}
 
 	@Test
@@ -328,8 +328,8 @@ class UserServiceTest {
 
 		verify(userRepositoryMock).findByEmail(email);
 		verify(userRepositoryMock, never()).getReferenceById(any());
-		verify(userMapper, never()).toUserResponse(any());
-		verifyNoMoreInteractions(userRepositoryMock, userMapper);
+		verify(userMapperMock, never()).toUserResponse(any());
+		verifyNoMoreInteractions(userRepositoryMock, userMapperMock);
 	}
 
 	@Test

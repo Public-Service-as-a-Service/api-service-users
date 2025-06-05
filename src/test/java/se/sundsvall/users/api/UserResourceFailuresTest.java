@@ -65,7 +65,7 @@ class UserResourceFailuresTest {
 		final String email = "kallekula";
 
 		// Act
-		final var response = webTestClient.get().uri("/api/users/email/{email}", email)
+		final var response = webTestClient.get().uri("/api/users/emails/{email}", email)
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON)
@@ -96,7 +96,7 @@ class UserResourceFailuresTest {
 			.withStatus("status");
 
 		// act
-		final var response = webTestClient.put().uri("/api/users/email/{email}", email)
+		final var response = webTestClient.put().uri("/api/users/emails/{email}", email)
 			.bodyValue(userRequest)
 			.exchange()
 			.expectStatus().isBadRequest()

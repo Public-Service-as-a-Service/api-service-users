@@ -16,7 +16,7 @@ import se.sundsvall.users.integration.citizen.CitizenIntegration;
 @ExtendWith(MockitoExtension.class)
 class CitizenIntegrationTests {
 	@Mock
-	private CitizenClient MockCitizenClient;
+	private CitizenClient mockCitizenClient;
 
 	@InjectMocks
 	private CitizenIntegration citizenIntegration;
@@ -28,7 +28,7 @@ class CitizenIntegrationTests {
 		final var municipalityId = "2281";
 		final var partyId = UUID.randomUUID().toString();
 
-		when(MockCitizenClient.getCitizenPartyId(personalNumber, municipalityId)).thenReturn(partyId);
+		when(mockCitizenClient.getCitizenPartyId(personalNumber, municipalityId)).thenReturn(partyId);
 
 		// Act
 		final var result = citizenIntegration.getCitizenPartyId(personalNumber, municipalityId);
@@ -36,8 +36,8 @@ class CitizenIntegrationTests {
 		// Assert
 		assertThat(result).isEqualTo(partyId);
 
-		verify(MockCitizenClient).getCitizenPartyId(personalNumber, municipalityId);
-		verifyNoMoreInteractions(MockCitizenClient);
+		verify(mockCitizenClient).getCitizenPartyId(personalNumber, municipalityId);
+		verifyNoMoreInteractions(mockCitizenClient);
 	}
 
 	@Test
@@ -47,7 +47,7 @@ class CitizenIntegrationTests {
 		final var municipalityId = "2281";
 
 		doThrow(FeignException.InternalServerError.class)
-			.when(MockCitizenClient).getCitizenPartyId(personalNumber, municipalityId);
+			.when(mockCitizenClient).getCitizenPartyId(personalNumber, municipalityId);
 
 		// Act
 		final var result = citizenIntegration.getCitizenPartyId(personalNumber, municipalityId);
@@ -55,7 +55,7 @@ class CitizenIntegrationTests {
 		// Assert
 		assertThat(result).isNull();
 
-		verify(MockCitizenClient).getCitizenPartyId(personalNumber, municipalityId);
-		verifyNoMoreInteractions(MockCitizenClient);
+		verify(mockCitizenClient).getCitizenPartyId(personalNumber, municipalityId);
+		verifyNoMoreInteractions(mockCitizenClient);
 	}
 }

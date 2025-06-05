@@ -72,7 +72,7 @@ class UserResourceTest {
 		when(userServiceMock.getUserByEmail(email)).thenReturn(userResponse);
 
 		final var response = webTestClient.get()
-			.uri("/api/users/email/{email}", email)
+			.uri("/api/users/emails/{email}", email)
 			.exchange()
 			.expectStatus().isOk()
 			.expectBody(UserResponse.class)
@@ -149,7 +149,7 @@ class UserResourceTest {
 		when(userServiceMock.updateUserByEmail(any(UpdateUserRequest.class), eq(email))).thenReturn(userResponse);
 
 		final var response = webTestClient.put()
-			.uri("api/users/email/{email}", email)
+			.uri("api/users/emails/{email}", email)
 			.bodyValue(userRequest)
 			.exchange()
 			.expectStatus().isCreated()
@@ -232,7 +232,7 @@ class UserResourceTest {
 
 		doNothing().when(userServiceMock).deleteUserByEmail(email);
 		final var response = webTestClient.delete()
-			.uri("api/users/email/{email}", email)
+			.uri("api/users/emails/{email}", email)
 			.exchange()
 			.expectStatus().isNoContent()
 			.expectBody(UserResponse.class)

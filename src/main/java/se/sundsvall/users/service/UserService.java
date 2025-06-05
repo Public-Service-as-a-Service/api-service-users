@@ -35,17 +35,6 @@ public class UserService {
 		this.userMapper = userMapper;
 	}
 
-//	// CREATE
-//	public UserResponse createUser(UserRequest userRequest) {
-//		if (userRepository.findByEmail(userRequest.getEmail()).isEmpty()||userRepository.findByPartyId(userRequest.getPersonalNumber()).isEmpty()) {
-//			final var userEntity = userRepository.save(userMapper.toUserEntity(userRequest));
-//
-//			return userMapper.toUserResponse(userEntity);
-//		}
-//		throw Problem.valueOf(CONFLICT, format(USER_ALREADY_EXISTING));
-//	}
-
-	// CREATE **Går det göra den finare??**
 	public UserResponse createUser(UserRequest userRequest) {
 
 		String partyId = null;

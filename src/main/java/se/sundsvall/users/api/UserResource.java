@@ -50,7 +50,7 @@ public class UserResource {
 			.body(user);
 	}
 
-	@GetMapping("users/email/{email}")
+	@GetMapping("users/emails/{email}")
 	@Operation(summary = "Get information about a user with Email")
 	public ResponseEntity<UserResponse> getUserByEmail(@Parameter(description = "Email-address") @Valid @Email @PathVariable String email) {
 		var user = userService.getUserByEmail(email);
@@ -74,7 +74,7 @@ public class UserResource {
 		return user != null ? ok(user) : ResponseEntity.noContent().build();
 	}
 
-	@PutMapping("users/email/{email}")
+	@PutMapping("users/emails/{email}")
 	@Operation(summary = "Update information of a user with Email")
 	@ApiResponse(responseCode = "201", description = "Successful operation", useReturnTypeSchema = true)
 	@Validated
@@ -108,7 +108,7 @@ public class UserResource {
 			.body(user);
 	}
 
-	@DeleteMapping("users/email/{email}")
+	@DeleteMapping("users/emails/{email}")
 	@Operation(summary = "Delete a user with Email")
 	@ApiResponse(responseCode = "204", description = "Successful operation", useReturnTypeSchema = true)
 	public ResponseEntity<Void> deleteByEmail(
