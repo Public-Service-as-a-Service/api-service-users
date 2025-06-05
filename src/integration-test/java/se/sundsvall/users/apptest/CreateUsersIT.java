@@ -19,18 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CreateUsersIT extends AbstractAppTest {
     private static final String Request = "request.json";
 
-    private static final String EMAIL = "test@sundsvall.se";
-    private static final String PHONE_NUMBER = "0701234567";
-    private static final String MUNICIPALITY_ID = "2281";
-    private static final Status STATUS = Status.INACTIVE;
-
     @Autowired
     private UserRepository userRepository;
 
     @Test
     void test01_createUser() {
 
-        assertThat(userRepository.findByEmail(EMAIL)).isEmpty();
+        assertThat(userRepository.findByEmail("test1@sundsvall.se")).isEmpty();
 
         setupCall()
                 .withServicePath("/api/users")
@@ -39,13 +34,13 @@ class CreateUsersIT extends AbstractAppTest {
                 .withExpectedResponseStatus(HttpStatus.CREATED)
                 .sendRequestAndVerifyResponse();
 
-        final var user = userRepository.findByEmail(EMAIL);
+        final var user = userRepository.findByEmail("test@sundsvall.se");
         assertThat(user).isPresent();
         assertThat(user.get().getStatus()).isNotNull();
-        assertThat(user.get().getEmail()).isEqualTo(EMAIL);
-        assertThat(user.get().getPhoneNumber()).isEqualTo(PHONE_NUMBER);
-        assertThat(user.get().getMunicipalityId()).isEqualTo(MUNICIPALITY_ID);
-        assertThat(user.get().getStatus()).isEqualTo(STATUS);
+        assertThat(user.get().getEmail()).isEqualTo("test@sundsvall.se");
+        assertThat(user.get().getPhoneNumber()).isEqualTo("0701234567");
+        assertThat(user.get().getMunicipalityId()).isEqualTo("2281");
+        assertThat(user.get().getStatus()).isEqualTo(Status.INACTIVE);
 
     }
 
@@ -66,11 +61,31 @@ class CreateUsersIT extends AbstractAppTest {
         final var user = userRepository.findByEmail("test2@sundsvall.se");
         assertThat(user).isPresent();
         assertThat(user.get().getPartyId()).isEqualTo(partyId);
-        assertThat(user.get().getStatus()).isNotNull();
         assertThat(user.get().getEmail()).isEqualTo("test2@sundsvall.se");
         assertThat(user.get().getPhoneNumber()).isEqualTo("0701234567");
-        assertThat(user.get().getMunicipalityId()).isEqualTo(MUNICIPALITY_ID);
+        assertThat(user.get().getMunicipalityId()).isEqualTo("2281");
         assertThat(user.get().getStatus()).isEqualTo(Status.INACTIVE);
+
+    }
+
+    @Test
+    void test03_createUserCitizenNotFound() {
+        final String email = "test3@sundsvall.se";
+
+        assertThat(userRepository.findByEmail(email)).isEmpty();
+        setupCall()
+        .withServicePath("/api/users")
+                .withHttpMethod(HttpMethod.POST)
+                .withRequest(Request)
+                .withExpectedResponseStatus(HttpStatus.CREATED)
+                .sendRequestAndVerifyResponse();
+
+        final var user = userRepository.findByEmail(email);
+        assertThat(user).isPresent();
+        assertThat(user.get().getEmail()).isEqualTo("test3@sundsvall.se");
+        assertThat(user.get().getPhoneNumber()).isEqualTo("0722143657");
+        assertThat(user.get().getMunicipalityId()).isEqualTo("1440");
+        assertThat(user.get().getStatus()).isEqualTo(Status.SUSPENDED);
 
     }
 
